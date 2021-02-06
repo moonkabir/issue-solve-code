@@ -1,0 +1,8 @@
+Gateway Name:AamarPay
+Gateway URL: "https://www.yourserver.com/paymentpage.php" //look like
+Payment Gateway Access Level for Customers / Sub-Resellers:Customers 
+Send me a Reminder if a transaction is pending for more than x days:1days
+Display Position:
+Checksum Algorithm:MD5
+$key = "44q9dn7WCUrLHgi8bPsdiBIlLi6WaHI0"; //replace ur 32 bit secure key , 
+			Get your secure key from your Reseller Control panel
