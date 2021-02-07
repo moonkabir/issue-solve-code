@@ -1,0 +1,21 @@
+//Call data from database in the payment table
+	define('DB_SERVER','localhost');
+	define('DB_USER','bitbirdc_resellerclub');
+	define('DB_PASS' ,')Z&,=!Ihve7R');
+	define('DB_NAME', 'bitbirdc_resellerclub_db');
+	$connection = mysqli_connect( DB_SERVER, DB_USER, DB_PASS, DB_NAME );
+	if (!$connection) {
+		echo "Cannot connect to database";
+		throw new Exception( "Cannot connect to database" );
+	}else {
+		if($transId){
+			$query = "SELECT * FROM `payment` WHERE `tran_id` = '{$transId}'";
+			$result = mysqli_query($connection,$query);
+            if(mysqli_num_rows($result)>0){
+				$data = mysqli_fetch_assoc($result);
+				$redirectUrl = $data['redirecturl'];
+				$sellingCurrencyAmount = $data['sellingCurrencyAmount'];
+				$accountingCurrencyAmount = $data['accountingCurrencyAmount'];
+			}
+		}
+	}
