@@ -1,0 +1,1 @@
+Header(“X-Robots-Tag: no index, no follow”, true);
