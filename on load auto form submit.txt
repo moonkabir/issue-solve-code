@@ -1,0 +1,15 @@
+	<form name="f1"  id="yourform" action="<?php echo $redirectUrl;?>">
+		<input type="hidden" name="transid" value="<?php echo $transId;?>">
+		<input type="hidden" name="status" value="<?php echo $status;?>">
+		<input type="hidden" name="rkey" value="<?php echo $rkey;?>">
+		<input type="hidden" name="checksum" value="<?php echo $checksum;?>">
+		<input type="hidden" name="sellingamount" value="<?php echo $sellingCurrencyAmount;?>">
+		<input type="hidden" name="accountingamount" value="<?php echo $accountingCurrencyAmount;?>">
+		<input type="submit" value="Click here to Continue"><BR>
+	</form>
+	
+    <script>            
+        document.addEventListener("DOMContentLoaded", function(event) {
+            document.createElement('form').submit.call(document.getElementById('yourform'));
+        });         
+    </script>
