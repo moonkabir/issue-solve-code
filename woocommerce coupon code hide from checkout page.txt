@@ -1,0 +1,8 @@
+// hide coupon code
+function ocin_hide_coupon_field_on_woocommerce_checkout( $enabled ) {
+	if ( is_checkout() ) {
+		$enabled = false;
+	}
+	return $enabled;
+}
+add_filter( 'woocommerce_coupons_enabled', 'ocin_hide_coupon_field_on_woocommerce_checkout' );
