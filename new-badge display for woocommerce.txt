@@ -1,4 +1,4 @@
-// -----------------------New badge--------------------------
+// -----------------------New badge or best seller--------------------------
 
 add_action('woocommerce_before_shop_loop_item_title', 'bitbirds_new_badge_shop_page', 3);
 
@@ -9,5 +9,7 @@ function bitbirds_new_badge_shop_page()
 	$created = strtotime($product->get_date_created());
 	if ((time() - (60 * 60 * 24 * $newness_days)) < $created) {
 		echo '<span class="onsale new-badge">' . esc_html__('New', 'bitbirds') . '</span>';
+	} else {
+		echo '<span class="onsale best-seller">' . esc_html__('Best Seller', 'bitbirds') . '</span>';
 	}
 }
