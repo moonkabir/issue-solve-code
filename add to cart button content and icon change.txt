@@ -1,0 +1,13 @@
+/**
+ * Add to cart button change
+ */
+
+add_filter( 'woocommerce_product_add_to_cart_text', 'bitbirds_change_add_to_cart_text' );  
+function bitbirds_change_add_to_cart_text() {
+	return __(' Add to Basket');
+}
+
+.bestseller-desktop .products li.product a.button:before{
+	font-family: "Font Awesome 5 Free";
+	content:"\f07a"
+}
