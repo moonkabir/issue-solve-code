@@ -1,0 +1,35 @@
+
+/**
+ * stock status
+ */
+add_action('woocommerce_after_shop_loop_item', 'bitbirds_show_stock_shop', 10);
+
+function bitbirds_show_stock_shop()
+{
+	global $product;
+	echo wc_get_stock_html($product);
+}
+
+/**
+ * stock content change
+ */
+
+add_filter('woocommerce_get_availability_text', 'bitbirds_custom_get_availability_text', 7, 2);
+
+function bitbirds_custom_get_availability_text($availability, $product)
+{
+	//    $stock = $product->get_stock_quantity();
+	if ($product->is_in_stock()) {
+		$in_stock = get_theme_file_uri("assets/images/in-stock.png");
+		$availability = <<<EOD
+		<span class="in-stock-content"><img src="{$in_stock}" class="in-stock-img">På lager</span></span>
+		EOD;
+	}
+	if (!$product->is_in_stock()) {
+		$out_of_stock = get_theme_file_uri("assets/images/out-of-stock.png");
+		$availability = <<<EOD
+		<span class="out-of-stock-content"><img src="{$out_of_stock}" class="out-of-stock-img">Ikke på lager</span></span>
+		EOD;
+	}
+	return $availability;
+}
