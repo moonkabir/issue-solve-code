@@ -1,0 +1,19 @@
+/--------Add two scripts and style-------/
+
+wp_enqueue_script("lineProgressbar-js", get_theme_file_uri("/assets/js/jquery.lineProgressbar.js"), array("jquery"), "1.0", true);
+wp_enqueue_script("loadmore-progressbar-js", get_theme_file_uri("/assets/js/loadmore_progressbar.js"), array("jquery"), "1.0", true);
+wp_enqueue_style("lineProgressbar-css", get_theme_file_uri("/assets/css/jquery.lineProgressbar.css"), null, "1.0");
+
+
+/--------In the function.php file you can add just this code-------/
+
+
+remove_action( 'woocommerce_after_shop_loop', 'woocommerce_pagination', 10 );
+function woocommerce_ajax_pagination() {
+?>
+<p class="lead">Displayed <b class="shownLength"></b> Of <b class="listLength"></b> Results.</p>
+<div id="jq"></div>
+<div class="buttonToogle" style="display: none;"><a href="javascript:;" class="showMore">+ View More</a></div>
+<?php	
+}
+add_action( 'woocommerce_after_shop_loop', 'woocommerce_ajax_pagination', 5 );
