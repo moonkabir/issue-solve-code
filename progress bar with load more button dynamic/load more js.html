@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="jquery.lineProgressbar.css">
+    <title>jQuery Show More products Example</title>
+    <style>
+        /* a.showMore {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: white;
+            text-decoration: none;
+            background-color: #0077C8;
+            padding: 10px 20px;
+            width: 100px;
+            text-align: center;
+            border-radius: 15px;
+        } */
+        /* .products .product {
+            display: inline-block;
+            margin: 20px 20px;
+            padding: 40px 80px;
+            background-color: #222;
+            color: #fff;
+            border-radius: 5px;
+        } */
+    </style>
+</head>
+
+<body>
+    <div class="container">
+    <h1>jQuery Show More products Example</h1>
+    <div class="content">
+        <ul class="products">
+            <li class="product">Item 1</li>
+            <li class="product">Item 2</li>
+            <li class="product">Item 3</li>
+            <li class="product">Item 4</li>
+            <li class="product">Item 5</li>
+            <li class="product">Item 6</li>
+            <li class="product">Item 7</li>
+            <li class="product">Item 8</li>
+            <li class="product">Item 9</li>
+            <li class="product">Item 10</li>
+            <li class="product">Item 10</li>
+            <li class="product">Item 10</li>
+            <li class="product">Item 10</li>
+        </ul>
+        <p class="lead">Displayed <b class="shownLength"></b> Of <b class="listLength"></b> Results.</p>
+        <div id="jq"></div>
+        <div class="buttonToogle" style="display: none;"><a href="javascript:;" class="showMore">+ View More</a></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="jquery.lineProgressbar.js"></script>
+    <script>
+        var value = 3;
+        total = $('.products').find('li').length;
+        $(function() {
+            var increment = 3;
+            var startFilter = 0;
+            var endFilter = increment;
+            var $this = $('.products');
+            var elementLength = $this.find('li').length;
+            $('.listLength').text(elementLength);
+            if (elementLength > 2) {
+                $('.buttonToogle').show();
+            }
+            $('.products .product').slice(startFilter, endFilter).addClass('shown');
+            $('.shownLength').text(endFilter);
+            $('.products .product').not('.shown').hide();
+            $('.buttonToogle .showMore').on('click', function() {
+                if (elementLength > endFilter) {
+                    startFilter += increment;
+                    endFilter += increment;
+                    $('.products .product').slice(startFilter, endFilter).not('.shown').addClass('shown').toggle(500);
+                    $('.shownLength').text((endFilter > elementLength) ? elementLength : endFilter);
+                    if (elementLength <= endFilter) {
+                        $(this).remove();
+                    }
+                    
+                }
+                value = endFilter;
+                return value;
+            });
+        });
+        percentage_main = value / total * 100;
+        percentage = value / total * 100;
+        $(document).ready(function() {
+            $('#jq').LineProgressbar({
+                percentage: percentage_main,
+                ShowProgressCount:true
+            });
+        });
+        $('.buttonToogle .showMore').on('click', function() {
+            if (percentage_main <= 100) {
+                percentage += percentage_main;
+                if(percentage<100){
+                    $('#jq').LineProgressbar({
+                        percentage: percentage,
+                        ShowProgressCount:true
+                    });
+                }else{
+                    $('#jq').LineProgressbar({
+                        percentage: 100,
+                        ShowProgressCount:true
+                    });
+                }  
+            }
+        });
+    </script>
+</div>
+</body>
+
+</html>
