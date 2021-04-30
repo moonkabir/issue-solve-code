@@ -1,0 +1,5 @@
+wp-content/plugins/woocommerce/includes/class-wc-form-handler.php
+line 629
+Here you can see those line that's need to be changed
+
+line 706 here you can see cart updated code 
