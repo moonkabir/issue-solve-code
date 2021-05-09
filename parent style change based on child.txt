@@ -1,4 +1,4 @@
-//-------------there is label border changed based on radio field value-----------
+//-------------there is label border changed based on radio field value parent class css change on basis of child-----------
 <script type="text/javascript">
 	function handleClick(myRadio) {
 		console.log('New value: ' + myRadio.value);
