@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<!-- 
+<li class="wc_payment_method payment_method_pensopay">
+	<label class="wc_payment_method_label" for="payment_method_pensopay">
+		credit card <img src="http://localhost/merchshark/wp-content/plugins/woo-pensopay/assets/images/cards/dankort.svg" alt="credit card" style="max-height:25px"><img src="http://localhost/merchshark/wp-content/plugins/woo-pensopay/assets/images/cards/visa.svg" alt="credit card" style="max-height:25px"><img src="http://localhost/merchshark/wp-content/plugins/woo-pensopay/assets/images/cards/mastercard.svg" alt="credit card" style="max-height:25px">	</label>
+			<div class="payment_box payment_method_pensopay">
+			<p>Betal med kreditkort via PensoPay.</p>
+		</div>
+		<input class="payment-checkbox" id="payment_method_pensopay" type="checkbox" name="payment_method[]" value="pensopay" checked="checked" data-order_button_text="Go to payment">
+	<span class="geekmark"></span>
+</li>
+<li class="wc_payment_method payment_method_mobilepay">
+	<label class="wc_payment_method_label" for="payment_method_mobilepay">
+		MobilePay <img src="http://localhost/merchshark/wp-content/plugins/woo-pensopay/assets/images/cards/mobilepay.svg" alt="MobilePay" style="max-height:25px">	</label>
+			<div class="payment_box payment_method_mobilepay" style="display:none;">
+			<p>Pay with your mobile phone</p>
+		</div>
+		<input class="payment-checkbox" id="payment_method_mobilepay" type="checkbox" name="payment_method[]" value="mobilepay" data-order_button_text="Go to payment">
+	<span class="geekmark"></span>
+</li> -->
+
+
+
+
+
+
+
+
+
+
+<style>
+/* div.options > label > input {
+    visibility: hidden;
+} */
+div.options > li > img {
+    height:30px;
+    width:30px;
+}
+div.options > li > input:checked +img {  
+    background: url(http://cdn1.iconfinder.com/data/icons/onebit/PNG/onebit_34.png);
+    background-repeat: no-repeat;
+    background-position:center center;
+    background-size:30px 30px;
+    background-color: red;
+}
+div.options > label > img {
+    height:30px;
+    width:30px;
+}
+div.options > label > input:checked +img {  
+    background: url(http://cdn1.iconfinder.com/data/icons/onebit/PNG/onebit_34.png);
+    background-repeat: no-repeat;
+    background-position:center center;
+    background-size:30px 30px;
+    background-color: red;
+}
+</style>
+<div class="options">
+
+<label class="wc_payment_method payment_method_pensopay">
+	<!-- <label class="wc_payment_method_label" for="payment_method_pensopay">
+		credit card <img src="http://localhost/merchshark/wp-content/plugins/woo-pensopay/assets/images/cards/dankort.svg" alt="credit card" style="max-height:25px"><img src="http://localhost/merchshark/wp-content/plugins/woo-pensopay/assets/images/cards/visa.svg" alt="credit card" style="max-height:25px"><img src="http://localhost/merchshark/wp-content/plugins/woo-pensopay/assets/images/cards/mastercard.svg" alt="credit card" style="max-height:25px">	</label> -->
+		<!-- <div class="payment_box payment_method_pensopay" style="display: block;">
+			<p>Betal med kreditkort via PensoPay.</p>
+		</div> -->
+    <input type="radio" name="payment_method" value="pensopay1">
+	<img class="payment-checkbox-img">
+	<!-- <span class="geekmark"></span> -->
+</label>
+<label class="wc_payment_method payment_method_pensopay">
+	<!-- <label class="wc_payment_method_label" for="payment_method_pensopay">
+		credit card <img src="http://localhost/merchshark/wp-content/plugins/woo-pensopay/assets/images/cards/dankort.svg" alt="credit card" style="max-height:25px"><img src="http://localhost/merchshark/wp-content/plugins/woo-pensopay/assets/images/cards/visa.svg" alt="credit card" style="max-height:25px"><img src="http://localhost/merchshark/wp-content/plugins/woo-pensopay/assets/images/cards/mastercard.svg" alt="credit card" style="max-height:25px">	</label> -->
+			<!-- <div class="payment_box payment_method_pensopay" style="display: block;">
+			<p>Betal med kreditkort via PensoPay.</p>
+		</div> -->
+	<input type="radio" name="payment_method" value="pensopay">
+	<img class="payment-checkbox-img">
+	<!-- <span class="geekmark"></span> -->
+</label>
+
+
+
+
+
+    <label title="item1"><input type="radio" name="foo" value="0" /> Item 1<img /></label>
+    <label title="item2"><input type="radio" name="foo" value="1" />Item 2<img /></label>   
+    <label title="item3"><input type="radio" name="foo" value="2" />Item 3<img /></label>
+</div>
+
+
+
+
+
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+<!-- <script>
+jQuery(".payment-checkbox").click(function() {
+    jQuery(".payment-checkbox").prop('checked', false);
+    jQuery(this).prop('checked', true);
+    console.log("Clicked")
+});
+</script> -->
+</body>
+</html>
