@@ -1,0 +1,28 @@
+//------------------ email check up popup-----------------------
+function bbloomer_checkout_fields_in_label_error( $field, $key, $args, $value ) {
+	if ( strpos( $field, '</label>' ) !== false && $args['required'] ) {
+		$error = '<span class="error" style="display:none">Det ser rigtigt ud, men venligst dobbelttjek</span>';
+		$field = substr_replace( $field, $error, strpos( $field, '</label>' ), 0);
+	}
+	return $field;
+}
+add_filter( 'woocommerce_form_field', 'bbloomer_checkout_fields_in_label_error', 10, 4 );
+
+//-------------css-------------
+
+.chekout-page-container #billing_email_field.woocommerce-validated{
+	margin-bottom: 20px !important;
+}
+.chekout-page-container #billing_email_field.woocommerce-validated span.error {
+    color: #fff;
+    display: block !important;
+    font-weight: bold;
+    position: absolute;
+    width: max-content;
+    margin-left: 225px;
+    margin-top: 10px;
+    background: #18ac34;
+    font-size: 14px;
+    padding: 6px;
+    border-radius: 17px;
+}
