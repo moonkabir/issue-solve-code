@@ -1,0 +1,14 @@
+function bitbirds_billing_field_error_code( $fields, $errors ){
+  	if( !empty( $errors->get_error_codes() ) ) {
+		foreach( $errors->get_error_codes() as $code ) {
+			$errors->remove( $code );
+			if($code == 'billing_email_required' ){
+				$data = 'tomar email nail E-mail';
+			}else{
+				$data = 'There is an error in ' .$code;
+			}
+			$errors->add('validation',$data);
+		}
+  	}
+}
+add_action('woocommerce_after_checkout_validation','bitbirds_billing_field_error_code',999,2);
