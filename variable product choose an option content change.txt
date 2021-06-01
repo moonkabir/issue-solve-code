@@ -1,0 +1,6 @@
+//--------------variable product choose an option content change---------------------
+add_filter( 'woocommerce_dropdown_variation_attribute_options_args', 'bitbirds_filter_dropdown_args', 10 );
+function bitbirds_filter_dropdown_args( $args ) {
+    $args['show_option_none'] = 'Vælg størelse';
+    return $args;
+}
