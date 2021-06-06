@@ -38,7 +38,7 @@ variation product after table:
 				</div>
 				<div class="modal-body">
 					<p>Du mangler at vælge variant</p>
-					<table class="variations" cellspacing="0">
+					<table class="variations-modal" cellspacing="0">
 						<tbody>
 							<?php foreach ( $attributes as $attribute_name => $options ) : ?>
 								<tr>
