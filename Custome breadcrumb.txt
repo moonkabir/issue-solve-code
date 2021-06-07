@@ -1,3 +1,4 @@
+Function page:
 // ----------------Custom breadcrumb in single product page ----------------
 function custom_breadcrumbs() {
     $separator          = '&#47;';
@@ -42,3 +43,6 @@ function custom_breadcrumbs() {
         echo '</ul>'; 
     }   
 }
+Content-single-product.php:
+
+<?php custom_breadcrumbs(); ?>
