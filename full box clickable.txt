@@ -1,0 +1,10 @@
+label for and (checkbox or radio) button id is same then full box is clickable.
+Design Must be Label is parent and (checkbox or radio) button is child.
+
+<label class="shipping-options shipmondo3 shipmondo free" for="shipmondo3">
+	<label class="shipping-label" for="shipping_method_0_shipmondo3">
+        <img src="http://localhost/merchshark/wp-content/themes/merchshark/assets/images/gls-logo.png'" style="width:50px;padding-bottom: 5px;"> til pakkeshop (free)
+    </label>
+    <input type="radio" onclick="shipping_method_clicked(this);" name="shipping_method[0]" data-index="0" id="shipmondo3" value="shipmondo:3" class="shipping_method">
+    <img class="payment-checkbox-img">
+</label>
