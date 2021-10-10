@@ -1,0 +1,9 @@
+<head> 
+<meta http-equiv="refresh" content="10; URL=https://bitbirds.com/" /> 
+</head> 
+<body> 
+<p>If you are not redirected in ten seconds, <a href="https://bitbirds.com/">click here</a>.</p> 
+<p>Merchshark Demo Site - <a href="https://merchshark.bitbirds.net/">click here</a>.</p> 
+<p>Accounting Demo Site - <a href="https://accounting.bitbirds.net/">click here</a>.</p> 
+<p>Visual Builder Demo Site - <a href="https://visualbuilder.bitbirds.net/">click here</a>.</p> 
+</body>
