@@ -1,0 +1,21 @@
+1.At first create your mail address from your server like as admin@mookabir.com
+2.Modify your .env file  
+	MAIL_DRIVER=smtp //type of mail driver
+	MAIL_HOST="mail.bim-aa.org" //Mail Client Manual Settings outging server name
+	MAIL_PORT=465 //Mail Client Manual Settings outging server port
+	MAIL_USERNAME="moon@bim-aa.org" //Mail from where out email
+	MAIL_PASSWORD="EP{g[x+!W.DZ" //Mail from where out pass
+	MAIL_ENCRYPTION=ssl //Mail encription setting ssl or tls
+	MAIL_FROM_ADDRESS="moon@bim-aa.org" //Mail address
+	MAIL_FROM_NAME="bim-aa" //Mail name which is show after send mail
+3.after which action mail is send
+	use Mail; //use after namespace and before class
+	$data['email_address'] = 'moon@pencilbox.edu.bd'; // which mail send mail
+        $data['subject'] = 'Bim-aa registration mail'; // Subject
+        $data['fname'] = 'Moon Kabir'; //message 
+        Mail::send('frontEnd.mail.mail', $data, function ($message) use ($data) {
+            $message->to($data['email_address']);
+            $message->subject($data['subject']);
+        });
+4.create mail blade file and paste the url frontEnd>mail>mail.blade.php
+	Hello {{$fname}}, This is Dummy content
