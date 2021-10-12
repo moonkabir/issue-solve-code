@@ -1,5 +1,5 @@
 1.At first create your mail address from your server like as admin@mookabir.com
-2.Modify your .env file  
+2.Modify your .env file  (get data from cpanel->email accounts->connect devices)
 	MAIL_DRIVER=smtp //type of mail driver
 	MAIL_HOST="mail.bim-aa.org" //Mail Client Manual Settings outging server name
 	MAIL_PORT=465 //Mail Client Manual Settings outging server port
