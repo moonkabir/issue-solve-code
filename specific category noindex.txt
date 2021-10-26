@@ -1,0 +1,11 @@
+
+//noindex specific category
+add_filter( 'wpseo_robots', 'merchshark_noindex_loyal_category' ); 
+function merchshark_noindex_loyal_category( $robots ) {
+	global $product;
+	if (has_term('kaviar', 'product_cat')) { 
+		return 'noindex,nofollow'; 
+	}else {
+		return $robots; 
+	}
+}
