@@ -21,6 +21,7 @@ function display_price_in_variation_option_name($term){
 		$parent = wp_get_post_parent_id($variation_id[0]);
 		if ($parent > 0) {
 			$_product = new WC_Product_Variation($variation_id[0]);
+			$_currency = get_woocommerce_currency_symbol();
 			$stock = $_product->is_in_stock() ? 'På lager' : 'Ikke på lager';
 			if (count($prices_result) == 1) {
 				return $term . ' &nbsp;- &nbsp;' . $stock;
