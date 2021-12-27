@@ -10,13 +10,13 @@ function register_my_menus() {
 }
 add_action( 'init', 'register_my_menus' );
 
-public function get_menu_id(){
+function get_menu_id(){
     $locations = get_nav_menu_locations();
     $menu_id = $locations['practise_Header_menu'];
     return ! empty( $menu_id ) ? $menu_id : "";
 }
 
-public function get_child_menu_items( $menu_array, $parent_id ) {
+function get_child_menu_items( $menu_array, $parent_id ) {
     $child_menus = [];
     if( !empty( $menu_array) && is_array( $menu_array ) ) {
         foreach( $menu_array as $menu ){
