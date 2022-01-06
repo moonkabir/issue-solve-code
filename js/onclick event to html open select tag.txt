@@ -1,0 +1,10 @@
+<select id="support_support_type" name="support[support_type]">
+  <option value="Contact">Contact</option>
+  <option value="Feedback">Feedback</option>
+  <option value="Help">Help</option>
+</select>
+<span class="drop down-arrow"></span>
+
+.drop.down-arrow{
+    pointer-events: none;
+}

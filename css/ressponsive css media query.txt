@@ -1,0 +1,37 @@
+@media (min-width: 1200px) {}
+
+@media (min-width: 1200px) and (max-width:1500px) {}
+
+@media (max-width: 1200px) {}
+
+@media (min-width:992px) {}
+
+@media (min-width: 992px) and (max-width: 1199px) {}
+
+@media (max-width:991px) {}
+
+@media (min-width: 481px) and (max-width: 991px) {}
+
+@media (min-width: 768px) and (max-width: 991px) {}
+
+@media (min-width:768px) {}
+
+@media (max-width:767px) {}
+
+@media (min-width: 481px) and (max-width: 767px) {}
+
+@media (min-width: 481px) and (max-width: 601px) {}
+
+@media (min-width: 481px) and (max-width: 535px) {}
+
+@media (max-width: 480px) {}
+
+@media(min-width:400px) and (max-width: 450px) {}
+
+@media(min-width:370px) and (max-width: 400px) {}
+
+@media (max-width: 370px) {}
+
+@media (min-width:340px) and (max-width: 370px) {}
+
+@media (max-width: 340px) {}

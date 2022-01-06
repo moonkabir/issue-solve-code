@@ -1,0 +1,15 @@
+<script>
+var form = $('<form name="f1" action="<?php echo $redirectUrl;?>">' +
+'<input type="hidden" name="transid" value="<?php echo $transId;?>">' +
+'<input type="hidden" name="status" value="<?php echo $status;?>">' +
+'<input type="hidden" name="rkey" value="<?php echo $rkey;?>">' +
+'<input type="hidden" name="checksum" value="<?php echo $checksum;?>">' +
+'<input type="hidden" name="sellingamount" value="<?php echo $sellingCurrencyAmount;?>">' +
+'<input type="hidden" name="accountingamount" value="<?php echo $accountingCurrencyAmount;?>">' +
+'</form>');
+$('body').append(form);
+$(form).submit();
+</script>
+<script>
+window.location.href = "<?php echo $redirectUrl ?>";
+</script>

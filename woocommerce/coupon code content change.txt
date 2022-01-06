@@ -1,0 +1,12 @@
+// ---------Coupon code content change ---------------
+add_filter( 'woocommerce_coupon_error','coupon_error_message_change',10,3 );
+function coupon_error_message_change($err, $err_code, $parm ){
+	switch ( $err_code ) {
+		case 105:
+		/* translators: %s: coupon code */
+		// $err = sprintf( __( 'Coupon "%s" does not test!', 'woocommerce' ), $parm->get_code() );
+		$err = sprintf( __('Denne rabatkupon kan ikke benyttes på allerede nedsatte vare', 'merchshark' ), $parm->get_code() );
+		break;
+	}
+	return $err;
+}

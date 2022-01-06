@@ -1,2 +1,0 @@
-// ---------remove short description in single product page---------------------
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );

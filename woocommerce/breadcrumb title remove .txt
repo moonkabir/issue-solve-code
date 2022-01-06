@@ -1,0 +1,13 @@
+Function page:
+// ----------------breadcrumb in single product page ----------------
+// add_filter( 'woocommerce_get_breadcrumb', 'ed_change_breadcrumb' );
+// function ed_change_breadcrumb( $breadcrumb ) {
+// 	if(is_singular()){
+// 		array_pop($breadcrumb);
+// 	}
+//   return $breadcrumb;
+// }
+
+Content-single-product.php:
+
+<?php //woocommerce_breadcrumb(); ?>

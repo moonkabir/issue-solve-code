@@ -1,0 +1,22 @@
+.form-group{
+  padding:10px;
+  border:2px solid;
+  margin:10px;
+}
+.form-group>label{
+  position:absolute;
+  top:-1px;
+  left:20px;
+  background-color:white;
+}
+
+.form-group>input{
+  border:none;
+}
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+<form id="first_name">
+    <div class="form-group">
+         <label>First name</label>
+         <input type="text" class="form-control input-lg" />
+    </div>
+</form>

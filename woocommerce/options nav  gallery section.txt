@@ -1,0 +1,26 @@
+//--------------added WooCommerce Flexslider options angle---------------------
+add_filter('woocommerce_single_product_carousel_options', 'bitbirds_woo_flexslider_options');
+function bitbirds_woo_flexslider_options($options) {
+	// show arrows
+	$options['directionNav'] = true;
+	// $options['controlNav'] = true;
+	return $options;
+}
+
+
+/* .flex-control-paging {
+  margin: 0 !important;
+  text-align: center;
+}
+.flex-control-paging li {
+  display: inline-block;
+}
+.flex-control-paging a {
+  visibility: hidden;
+}
+.flex-control-paging a::before {
+  content: ".";
+  font-size: 80px;
+  line-height: 4px;
+  visibility: visible;
+} */

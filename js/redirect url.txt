@@ -1,0 +1,6 @@
+$redirectUrl = "http://stackoverflow.com";
+?>
+<script>
+window.location.href = "<?php echo $redirectUrl ?>";
+</script>
+<?php

@@ -1,0 +1,19 @@
+Function page:
+// ------------------search form -----------------
+
+function bitbirds_search_Form($form){
+	$homeDir = home_url('/');
+	$button_label = __("Søg","bitbirds");
+	$NewForm = <<<FORM
+	<form role="search" method="get" class="woocommerce-product-search" action="{$homeDir}" style="display:flex;">
+		<input type="search" id="woocommerce-product-search-field-0" class="search-field" placeholder="{$button_label}" value="" name="s">
+		<button type="submit" value="{$button_label}"><span>{$button_label}</span><i class="fas fa-search"></i></button>
+		<input type="hidden" name="post_type" value="product">
+	</form>
+	FORM;
+	return $NewForm;
+}
+add_filter("get_search_form","bitbirds_search_Form");
+
+Header:
+<?php get_search_form(); ?>

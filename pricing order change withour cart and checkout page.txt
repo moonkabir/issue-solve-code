@@ -1,9 +1,0 @@
-// ---------product price order change-----------
-function bitbirds_woocommerce_price_html( $price, $product ){
-	if( (! is_page( 'cart' ) || ! is_cart()) && (! is_checkout() || ! is_page( 'checkout' ))){
-		return preg_replace('@(<del>.*?</del>).*?(<ins>.*?</ins>)@misx', '$2 $1', $price);	
-	}else{
-		return $price;
-	}
-}
-add_filter( 'woocommerce_get_price_html', 'bitbirds_woocommerce_price_html', 100, 2 );

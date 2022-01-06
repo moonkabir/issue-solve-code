@@ -1,6 +1,0 @@
-    if(is_page(18)){
-        wp_register_script('google_api', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCHWNqdyY4a54prsUJKa5e3mPksL01ldaQ&libraries=places&region=dk', null, null, true );
-        wp_enqueue_script('google_api');
-        wp_register_script('checkout_script', get_stylesheet_directory_uri() . '/js/postnummer.js' );
-        wp_enqueue_script('checkout_script');
-    }

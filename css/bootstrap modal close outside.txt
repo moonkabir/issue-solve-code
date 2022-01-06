@@ -1,0 +1,3 @@
+            $("#black_friday_popUp").modal({
+                backdrop: true,
+            });

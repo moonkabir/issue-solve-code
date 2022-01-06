@@ -1,9 +1,0 @@
-/*------------Change Place Order button text on checkout page in woocommerce-------------*/
-add_filter('woocommerce_order_button_text','custom_order_button_text',1);
-function custom_order_button_text($order_button_text) {
-
-	$order_button_change_text = 'GÅ TIL BETALING:';
-	$order_button_change_price = WC()->cart->get_cart_contents_total().'Kr.';
-	$order_button_text = $order_button_change_text.' '.$order_button_change_price;
-	return $order_button_text;
-}

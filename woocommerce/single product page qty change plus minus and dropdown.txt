@@ -1,0 +1,91 @@
+function.php
+// -----single product page qty change plus minus and dropdown in mobile setion start---------
+add_action( 'woocommerce_after_add_to_cart_quantity', 'ts_quantity_plus_sign' );
+function ts_quantity_plus_sign() {
+	echo '<button type="button" class="single-product-plus" ><i class="fas fa-plus"></i></button>';
+	echo '<button type="button" class="single-product-dropdown" ><i class="fas fa-chevron-down"></i></button>';
+}
+add_action( 'woocommerce_before_add_to_cart_quantity', 'ts_quantity_minus_sign' );
+function ts_quantity_minus_sign() {
+	echo '<button type="button" class="single-product-minus" ><i class="fas fa-minus"></i></button>';
+}
+add_action( 'wp_footer', 'ts_quantity_plus_minus' );
+function ts_quantity_plus_minus() {
+	if ( ! is_product() ) return;
+?>
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$('form.cart').on( 'click', 'button.single-product-plus, button.single-product-minus', function() {
+			var qty = $( this ).closest( 'form.cart' ).find( '.qty' );
+			var val = parseFloat(qty.val());
+			var max = parseFloat(qty.attr( 'max' ));
+			var min = parseFloat(qty.attr( 'min' ));
+			var step = parseFloat(qty.attr( 'step' ));
+			if ( $( this ).is( '.single-product-plus' ) ) {
+				if ( max && ( max <= val ) ) {
+					qty.val( max );
+				}
+				else {
+					qty.val( val + step );
+				}
+			}
+			else {
+				if ( min && ( min >= val ) ) {
+					qty.val( min );
+				}
+				else if ( val > 1 ) {
+					qty.val( val - step );
+				}
+			}
+		});
+		if ($( window ).width() < 992) {
+			$('form.cart').on( 'click', 'button.single-product-dropdown', function() {
+				var place = document.querySelector(".single-qty-wrapper");
+				var ul = document.createElement("ul");
+				ul.className = "option-value";
+				place.appendChild(ul);
+				for (var i = 1; i <= 10; i++)
+				{
+					var li = document.createElement("li");  
+					li.className = i;
+					var a = document.createElement("a");
+					a.innerHTML = i;
+					li.appendChild(a);
+					ul.appendChild(li);
+				}
+				$('.option-value').on( 'click', 'li', function() {
+					document.querySelector("input.input-text").value = this.className;
+				});
+
+			});
+		}
+	});
+</script>
+<?php
+}
+// ------single product page qty change plus minus and dropdown in mobile setion end------
+style.css:
+.single-product-container .single-product-content .single-qty-wrapper button.single-product-dropdown {
+    border: 0;
+    background: 0;
+}
+.single-product-container .single-product-content .single-qty-wrapper button.single-product-dropdown:focus {
+    outline: 0;
+}
+.single-product-container .single-product-content .single-qty-wrapper  ul.option-value{
+    position: absolute;
+    margin-top: 40px;
+    list-style: none;
+    color: white;
+    margin-left: -42px;
+    z-index: 99;
+}
+.single-product-container .single-product-content .single-qty-wrapper ul.option-value li{
+	text-align: center;
+    background: #000;
+    padding: 5px 21px;
+	border-bottom: 1px solid;
+}
+.single-product-container .single-product-content .single-qty-wrapper ul.option-value li:hover{
+    background: #000;
+}

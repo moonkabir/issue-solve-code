@@ -1,7 +1,0 @@
-<?php
-                            // if (has_custom_logo()) {
-                            //     the_custom_logo();
-                            // } else {
-                            //     echo "<a href='" . home_url("/") . "'>" . get_bloginfo('name') . "</a>";
-                            // }
-                            ?>

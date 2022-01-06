@@ -1,0 +1,10 @@
+// ------------override checkout field label-------------------------
+add_filter( 'woocommerce_default_address_fields' , 'bbloomer_rename_state_province', 9999 );
+function bbloomer_rename_state_province( $fields ) {
+    $fields['address_1']['label'] = 'Gadenavn og nr.';
+    $fields['postcode']['label'] = 'Postnummer';
+    $fields['city']['label'] = 'By';
+    return $fields;
+}
+
+https://www.businessbloomer.com/woocommerce-rename-state-label-checkout/

@@ -1,6 +1,0 @@
-        $("#tns1").click(function (e) {
-            var source = $(e.target);
-            if(source.is("li > img")){
-                alert(source.parent().index());
-            }
-        });
