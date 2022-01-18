@@ -1,3 +1,30 @@
+--------------------url--------------------
+https://buy.daneshexchange.com/api//single_calculator/{code}
+--------------------controller---------------
+    public function all_calculatorDeliveryValue(Request $request){
+        // return $request;
+        $price = $request->price;
+        $country = $request->country;
+        if($price < 500 ){
+            $rate = 'rate';
+        }else if($price < 1000){
+            $rate = 'rate2';
+        }else{
+           $rate = 'rate3'; 
+        }
+        $all_data_array = DB::table('currency')->where('code', '=', $country)->select('code', $rate, 'flag', 'currency', 'min_denom')->get();
+        return response()->json([
+            'all_data_array' => $all_data_array
+        ]);
+    }
+    public function single_calculator($code){
+        $data = DB::table('currency')->where('code', '!=', 'AUD')->get();
+        $first_rate = DB::table('currency')->where('code', '=', $code)->get();
+        $dataHd = DB::table('delivery_fee_limit')->where('type','=','HD')->get();
+        $dataApd = DB::table('delivery_fee_limit')->where('type','=','APD')->get();
+        return view('api/single_calculator', compact('data', 'first_rate', 'dataHd', 'dataApd'));
+    }
+---------------html-----------------
 <!DOCTYPE html>
 <html>
 <title>Danesh Exchange</title>
