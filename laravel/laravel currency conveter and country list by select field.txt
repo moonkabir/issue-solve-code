@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<title>Danesh Exchange</title>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://buy.daneshexchange.com/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://buy.daneshexchange.com/css/style.css?v={{ time() }}" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <link href="https://buy.daneshexchange.com/css/bootstrap-select-country.min.css" rel="stylesheet">
+</head>
+<body>
+<style>
+    ul.dropdown-menu.inner li a {
+        padding-left: 20px;
+    }
+    ul.dropdown-menu.inner li {
+        list-style: none;
+    }
+    .bootstrap-select.btn-group .dropdown-menu li:focus-visible,
+    .bootstrap-select.btn-group .dropdown-menu li a:focus-visible,
+    a:focus,
+    .filter-option,
+    .btn-group.bootstrap-select.js-SourceCurrency.currencies-select,
+    .des-country{
+        outline: none !important;
+    }
+    
+    .dropdown-menu{
+        margin: 2px 0 0 -12px !important;
+        max-height: 250px !important;
+    }
+    .dropdown-flag:focus-visible{
+        outline: none;
+    }
+    #Buy_Currency{
+        background: #1333ae !important;
+    }
+    #Buy_Currency:hover {
+        color: #1333ae !important;
+        background: #fff !important;
+        border: 1px solid #1333ae !important;
+    }
+    .btn .currency-flag, .dropdown-menu li .currency-flag {
+        vertical-align: -3px;
+        line-height: 16px;
+    }
+    .currency-flag {
+        display: inline-block;
+        width: 24px;
+        height: 16px;
+        background-size: cover;
+        background-image: url(https://wise.com/public-resources/assets/flags/rectangle_fallback.png);
+    }
+    .currency-flag {
+        box-shadow: 0 0 1px 0 rgb(0 0 0 / 60%);
+    }
+    button.btn.dropdown-toggle.btn-default,
+    span.filter-option.pull-left{
+        padding-left: 0;
+    }
+    .au-amount-field,
+    .country-amount-wrapper{
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid #dedede;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    input#ftext1,
+    input#ctext1,
+    .btn-group.bootstrap-select.js-SourceCurrency.currencies-select,
+    button.btn.dropdown-toggle.btn-default,
+    select#Delivery_Method{
+        border: 0;
+    }
+    button.btn.dropdown-toggle.btn-default:focus-visible{
+        outline: 0 !important;
+    }
+    .au-amount-wrapper .au-amount-input, .country-amount-wrapper .for-amount-input {
+        width: 80px !important;
+        text-align: right !important;
+    }
+    .country-amount-label label,
+    .au-amount-wrapper label{
+        margin-top: 25px;
+        margin-bottom: 8px;
+        font-weight: 800;
+    }
+    .tultip-currency {
+        margin-bottom: 11px;
+    }
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        text-indent: 1px;
+        text-overflow: '';
+    }
+    span.bs-caret,
+    .dropdown-toggle::after{
+        display: none;
+    }
+    .for-amount {
+        display: flex;
+    }
+    @media only screen and (max-width: 480px) {
+        .au-amount-wrapper .au-amount-input,
+        .country-amount-wrapper .for-amount-input {
+            width: 60px !important;
+            font-size: 12px;
+        }
+        button.btn.dropdown-toggle.btn-default,
+        .au-amount-field p,
+        .tultip-currency,
+        #Buy_Currency {
+            font-size: 12px !important;
+        }
+        .total {
+            font-size: 14px;
+        }
+    }
+    @foreach ($data as $value)
+        .currency-flag.currency-flag-{{$value->flag}} {
+            background-image: url(https://buy.daneshexchange.com/flag/{{$value->flag}}.png);
+        }
+    @endforeach
+</style>
+<?php 
+    $apd_value_initial = 3000;
+    $usd_value_fraction = $first_rate[0]->rate3 * $apd_value_initial;
+    $usd_value_ceil = ceil($usd_value_fraction);
+    $minus_value = $usd_value_ceil - $usd_value_fraction;
+    $divided_value = $minus_value / $first_rate[0]->rate3;
+    $apd_value = $apd_value_initial + $divided_value;
+    $apd_value = round($apd_value,2);
+?>
+<form name="form" id='frm' action="https://buy.daneshexchange.com" method="post"  target="_parent">
+    <div class="row setup-content" id="step-1">
+        <div class="col-12 col-md-7 col-lg-6 col-xl-5">
+            <div class="panel panel-primary">
+                <div class="panel-body top-zero-margin">
+                    <div id='tbody_data'>
+                        <div class="odd" id='row_1'>
+                            <div class="au-amount-wrapper">
+                                <label>You send</label>
+                                <div class="au-amount-field">
+                                    <div class="d-flex" style="align-items: center;">
+                                        <img alt="flag" src="https://buy.daneshexchange.com/flag/au.png" aria-hidden="true" class="flag" style= "width: 24px; height: 17px; margin-right: 5px;">
+                                        <p style="font-size: 16px; margin: 0;color:#000">Australia – Dollar (AUD)</p>
+                                    </div>
+                                    <div>$<input id="ftext1" name="aud_value" value="{{$apd_value}}" maxlength=10 class="au-amount-input" oninput="price_calculate()"></div>
+                                </div>
+                            </div>
+                            <div class="country-amount-label">
+                                <label>Recipients gets</label>
+                            </div>
+                            <div class="country-amount-wrapper">
+                                <div class="des-country" style="display:flex">
+                                    <select id="sourceCurrency" class="js-SourceCurrency selectpicker currencies-select" onchange="CountryChange()">
+                                        @foreach ($data as $value)
+                                            <option value="{{$value->code}}"data-content="<div class='dropdown-flag'><div class='currency-flag currency-label currency-flag-{{$value->flag}}'></div><span>  {{$value->currency}}-{{$value->code}}</span></div>"></option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="for-amount">
+                                    <input name="foreign_amount" id="ctext1" maxlength=10 value="{{ $usd_value_ceil }}" class="for-amount-input" oninput="recipient_price_calculate()"><br/>
+                                </div>
+                            </div>
+                            <div class="country-amount-label">
+                                <label>Delivery Method</label>
+                            </div>
+                            <div class="country-amount-wrapper">
+                                <select id="Delivery_Method" onchange="idTypeChange()">
+									<option value="HD">Home Delivery</option>
+									<option value="APD">Australian Post Delivery</option>
+									<option value="Pickup">Local Store</option>
+								</select>
+                                <div class="for-amount">
+                                    <span id="code_rate_1_hd_apd">${{$dataHd[2]->fee}}</span>
+                                </div>
+                            </div>
+                            <div class="tultip-currency">
+                                <strong style="margin-top: 25px;display:flex;justify-content: space-between;">
+                                    <span style="color: #201f1f;">Rate</span>
+                                    <span id="code_rate_1" style="color: #5e5e5e;font-weight: 600;">{{$first_rate[0]->rate3}} USD</span>
+                                </strong>
+                            </div>
+
+                            <div class="tultip-currency">
+                                <strong style="display:flex;justify-content: space-between;">
+                                    <span style="color: #201f1f;">Commissions/fees</span>
+                                    <span id="commissions" style="color: #5e5e5e;font-weight: 600;">A$0.00</span>
+                                </strong>
+                            </div>
+                            <div class="tultip-currency">
+                                <strong style="display:flex;justify-content: space-between;">
+                                    <span style="color: #201f1f;">Delivery Date</span>
+                                    <span id="delivery_date" style="color: #5e5e5e;font-weight: 600;">Expected by 
+                                        <?php 
+											date_default_timezone_set('Australia/Melbourne');
+                                            if(date("l") == "Wednesday" && date("H") > 12){
+                                                echo date("F d", strtotime("+5 days"));
+                                            }else if(date("l") == "Thursday"){
+                                                echo date("F d", strtotime("+4 days"));
+                                            }else if(date("l") == "Friday"){
+                                                echo date("F d", strtotime("+3 days"));
+                                            }else if(date("H") > 12){
+                                                echo date("F d", strtotime("+3 days"));
+                                            }else{
+                                                echo date("F d", strtotime("+2 days"));
+                                            }
+                                        ?>
+                                    </span>
+                                </strong>
+                            </div>
+
+                            <div class="total-button" style="margin-top: 20px;border-top: 1px solid #dedede; padding-top: 20px;display: flex;justify-content: space-between;">
+                                <div class="total">
+                                    <p style="color:#000;font-size:16px;margin-bottom: 0;line-height: 20px;font-weight: 600;margin-top: 5px;">Total </p> 
+                                    <p style="color:rgb(92, 103, 123);font-size:16px;margin-top: 0;margin-bottom: 0;">A$ <span id="total_val">{{$dataHd[2]->fee + $apd_value}}</span></p>
+                                </div>
+                                <button id="Buy_Currency" class="btn btn-primary nextBtn btn-lg" type="button" onclick="return validate_ampunt();"> Buy Currency </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input id="total_val_hidden" type="hidden" name="total" value="{{$dataHd[2]->fee + $apd_value}}">  
+    <input id="delivery_method_hidden" type="hidden" name="delivery_type" value="HD">  
+    <input id="delivery_fee_hidden" type="hidden" name="delivery_fee" value="{{$dataHd[2]->fee}}">
+    <input id="destination_country_hidden" type="hidden" name="country_code" value="USD">
+    <input id="flag_hidden" type="hidden" name="flag" value="us">
+    <input id="country_name_hidden" type="hidden" name="country_name" value="UNITED STATES">
+</form>	
+<script src="https://buy.daneshexchange.com/js/jquery-3.4.1.min.js"></script>
+<script src="https://buy.daneshexchange.com/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+<script src="https://buy.daneshexchange.com/js/bootstrap-select-country.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/start/jquery-ui.min.css" rel="stylesheet">
+<script src="https://buy.daneshexchange.com/js/common.js" ></script>
+<script>
+	function idTypeChange() {
+		var price = $("#ftext1").val();
+		var idType = $("#Delivery_Method").val();
+		calculation(price,idType);
+	}
+	function price_calculate(){
+		var idType = $("#Delivery_Method").val();
+		var price = $("#ftext1").val();
+		var country = $("#sourceCurrency").val();
+		CountryCalculation(country,price);
+		calculation(price,idType);
+	}
+	function CountryChange(){
+		var price = $("#ftext1").val();
+		var country = $("#sourceCurrency").val();
+		CountryCalculation(country,price);
+        $("#destination_country_hidden").val(country);
+	}
+	function CountryCalculation(country,price){
+        $.ajax({
+            url: "https://buy.daneshexchange.com/api/all_calculatorDeliveryValue",
+            method: "GET",
+            data: { "price": price, "country": country },
+            dataType: "json",
+            success: function(save_data) {
+                // console.log(save_data);
+                var code = save_data.all_data_array[0].code;
+                var flag = save_data.all_data_array[0].flag;
+                var country_name = save_data.all_data_array[0].currency;
+                var min_denom = save_data.all_data_array[0].min_denom
+                if(save_data.all_data_array[0].rate3){
+                    var rate = save_data.all_data_array[0].rate3;
+                }else if(save_data.all_data_array[0].rate2){
+                    var rate = save_data.all_data_array[0].rate2;
+                }else{
+                    var rate = save_data.all_data_array[0].rate;
+                }
+                
+                var Recipients_amount_fraction = rate * price;
+                var Recipients_amount_ceil = Math.ceil(Recipients_amount_fraction);
+                
+                //-----------------for denom-----------------
+                var Recipients_amount_denom_fraction = Recipients_amount_ceil / min_denom;
+                var Recipients_amount_denom_ceil = Math.ceil(Recipients_amount_denom_fraction);
+                var minus_value_denom = Recipients_amount_denom_ceil - Recipients_amount_denom_fraction;
+                var mul_value_demon = minus_value_denom * min_denom;
+                var Recipients_amount = mul_value_demon + Recipients_amount_ceil;
+                
+                var aud_value_fraction = Recipients_amount / rate;
+                var aud_value = aud_value_fraction.toFixed(2);
+                
+                $("#code_rate_1").html(rate+" "+code);
+			    $("#ctext1").val(Recipients_amount);
+			    $("#ftext1").val(aud_value);
+                $("#flag_hidden").val(flag);
+                $("#country_name_hidden").val(country_name);
+            }
+        });
+	}
+    function recipient_price_calculate(){
+        var rate = parseFloat($("#code_rate_1").html().replace( /[^\d\.]*/g, ''));
+        var delivery_rate = parseFloat($("#code_rate_1_hd_apd").html().replace( /[^\d\.]*/g, ''));
+        var price = $("#ctext1").val();
+        var send_amount = price / rate;
+        $("#ftext1").val((parseFloat(send_amount)).toFixed(2));
+        $("#total_val").html((parseFloat(send_amount) + delivery_rate).toFixed(2));
+        $("#total_val_hidden").val((parseFloat(send_amount) + delivery_rate).toFixed(2));
+    }
+	function calculation(price,idType){
+		if(price < 500 && idType == 'HD'){
+			$("#code_rate_1_hd_apd").html("$<?php echo $dataHd[0]->fee; ?>");
+			$("#total_val").html((parseFloat(price) + parseFloat(<?php echo $dataHd[0]->fee; ?>)).toFixed(2));
+            $("#total_val_hidden").val((parseFloat(price) + parseFloat(<?php echo $dataHd[0]->fee; ?>)).toFixed(2));
+            $("#delivery_fee_hidden").val(parseFloat(<?php echo $dataHd[0]->fee; ?>));            
+		}else if(price < 2000 && idType == 'HD'){	
+			$("#code_rate_1_hd_apd").html("$<?php echo $dataHd[1]->fee; ?>");
+			$("#total_val").html((parseFloat(price) + parseFloat("<?php echo $dataHd[1]->fee; ?>")).toFixed(2));
+            $("#total_val_hidden").val((parseFloat(price) + parseFloat(<?php echo $dataHd[1]->fee; ?>)).toFixed(2));
+            $("#delivery_fee_hidden").val(parseFloat(<?php echo $dataHd[1]->fee; ?>));
+		}else if(price < 10000 && idType == 'HD'){		
+			$("#code_rate_1_hd_apd").html("$<?php echo $dataHd[2]->fee; ?>");
+			$("#total_val").html((parseFloat(price) + parseFloat("<?php echo $dataHd[2]->fee; ?>")).toFixed(2));
+            $("#total_val_hidden").val((parseFloat(price) + parseFloat(<?php echo $dataHd[2]->fee; ?>)).toFixed(2));
+            $("#delivery_fee_hidden").val(parseFloat(<?php echo $dataHd[2]->fee; ?>));
+		}else if(price < 500 && idType == 'APD'){
+			$("#code_rate_1_hd_apd").html("$<?php echo $dataApd[0]->fee; ?>");
+			$("#total_val").html((parseFloat(price)+parseFloat("<?php echo $dataApd[0]->fee; ?>")).toFixed(2));
+            $("#total_val_hidden").val((parseFloat(price) + parseFloat(<?php echo $dataApd[0]->fee; ?>)).toFixed(2));
+            $("#delivery_fee_hidden").val(parseFloat(<?php echo $dataApd[0]->fee; ?>));
+		}else if(price < 2000 && idType == 'APD'){	
+			$("#code_rate_1_hd_apd").html("$<?php echo $dataApd[1]->fee; ?>");
+			$("#total_val").html((parseFloat(price)+parseFloat("<?php echo $dataApd[1]->fee; ?>")).toFixed(2));
+            $("#total_val_hidden").val((parseFloat(price) + parseFloat(<?php echo $dataApd[1]->fee; ?>)).toFixed(2));
+            $("#delivery_fee_hidden").val(parseFloat(<?php echo $dataApd[1]->fee; ?>));
+		}else if(price < 10000 && idType == 'APD'){		
+			$("#code_rate_1_hd_apd").html("$<?php echo $dataApd[2]->fee; ?>");
+			$("#total_val").html((parseFloat(price)+parseFloat("<?php echo $dataApd[2]->fee; ?>")).toFixed(2));
+            $("#total_val_hidden").val((parseFloat(price) + parseFloat(<?php echo $dataApd[2]->fee; ?>)).toFixed(2));
+            $("#delivery_fee_hidden").val(parseFloat(<?php echo $dataApd[2]->fee; ?>));
+		}else if(idType == 'Pickup'){		
+			$("#code_rate_1_hd_apd").html("$ 00");
+			$("#total_val").html((parseFloat(price)).toFixed(2));
+            $("#total_val_hidden").val((parseFloat(price)).toFixed(2));
+            $("#delivery_fee_hidden").val("00");
+		}
+        $("#delivery_method_hidden").val(idType);
+	}
+</script>
+</body>
+</html>
