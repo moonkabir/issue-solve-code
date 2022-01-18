@@ -28,7 +28,9 @@
     .des-country{
         outline: none !important;
     }
-    
+    .dropdown-toggle::after {
+        margin-top: 10px;
+    }
     .dropdown-menu{
         margin: 2px 0 0 -12px !important;
         max-height: 250px !important;
@@ -38,6 +40,8 @@
     }
     #Buy_Currency{
         background: #1333ae !important;
+        box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+        border: 1px solid #1333ae !important;
     }
     #Buy_Currency:hover {
         color: #1333ae !important;
@@ -77,34 +81,47 @@
     select#Delivery_Method{
         border: 0;
     }
-    button.btn.dropdown-toggle.btn-default:focus-visible{
+    button.btn.dropdown-toggle.btn-default:focus-visible,#Delivery_Method{
         outline: 0 !important;
     }
     .au-amount-wrapper .au-amount-input, .country-amount-wrapper .for-amount-input {
         width: 80px !important;
         text-align: right !important;
     }
+    button.btn.dropdown-toggle.btn-default {
+        padding: 0px;
+    }
     .country-amount-label label,
     .au-amount-wrapper label{
         margin-top: 25px;
         margin-bottom: 8px;
-        font-weight: 800;
+        font-weight: 700;
+        font-family: 'Muli', sans-serif;
     }
     .tultip-currency {
         margin-bottom: 11px;
     }
-    select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        text-indent: 1px;
-        text-overflow: '';
+    /*select {*/
+    /*    -webkit-appearance: none;*/
+    /*    -moz-appearance: none;*/
+    /*    text-indent: 1px;*/
+    /*    text-overflow: '';*/
+    /*}*/
+    
+    option:hover {
+      background-color: yellow;
     }
-    span.bs-caret,
-    .dropdown-toggle::after{
+    span.bs-caret{
+    /*.dropdown-toggle::after{*/
         display: none;
     }
     .for-amount {
         display: flex;
+    }
+    .dropdown-flag span {
+        font-size: 16px;
+        margin: 0;
+        color: #000;
     }
     @media only screen and (max-width: 480px) {
         .au-amount-wrapper .au-amount-input,
@@ -151,7 +168,7 @@
                                         <img alt="flag" src="https://buy.daneshexchange.com/flag/au.png" aria-hidden="true" class="flag" style= "width: 24px; height: 17px; margin-right: 5px;">
                                         <p style="font-size: 16px; margin: 0;color:#000">Australia – Dollar (AUD)</p>
                                     </div>
-                                    <div>$<input id="ftext1" name="aud_value" value="{{$apd_value}}" maxlength=10 class="au-amount-input" oninput="price_calculate()"></div>
+                                    <div>$<input id="ftext1" name="aud_value" value="{{$apd_value}}" maxlength=10 class="au-amount-input" onchange ="price_calculate()"></div>
                                 </div>
                             </div>
                             <div class="country-amount-label">
@@ -161,7 +178,7 @@
                                 <div class="des-country" style="display:flex">
                                     <select id="sourceCurrency" class="js-SourceCurrency selectpicker currencies-select" onchange="CountryChange()">
                                         @foreach ($data as $value)
-                                            <option value="{{$value->code}}"data-content="<div class='dropdown-flag'><div class='currency-flag currency-label currency-flag-{{$value->flag}}'></div><span>  {{$value->currency}}-{{$value->code}}</span></div>"></option>
+                                            <option value="{{$value->code}}"data-content="<div class='dropdown-flag'><div class='currency-flag currency-label currency-flag-{{$value->flag}}'></div><span>  {{$value->currency}}-{{$value->currency_name}} ({{$value->code}})</span></div>"></option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -178,27 +195,27 @@
 									<option value="APD">Australian Post Delivery</option>
 									<option value="Pickup">Local Store</option>
 								</select>
-                                <div class="for-amount">
+                                <div class="for-amount" style="margin-top: 4px;">
                                     <span id="code_rate_1_hd_apd">${{$dataHd[2]->fee}}</span>
                                 </div>
                             </div>
                             <div class="tultip-currency">
                                 <strong style="margin-top: 25px;display:flex;justify-content: space-between;">
                                     <span style="color: #201f1f;">Rate</span>
-                                    <span id="code_rate_1" style="color: #5e5e5e;font-weight: 600;">{{$first_rate[0]->rate3}} USD</span>
+                                    <span id="code_rate_1" style="color: #5e5e5e;font-weight: 500;">{{$first_rate[0]->rate3}} USD</span>
                                 </strong>
                             </div>
 
                             <div class="tultip-currency">
                                 <strong style="display:flex;justify-content: space-between;">
                                     <span style="color: #201f1f;">Commissions/fees</span>
-                                    <span id="commissions" style="color: #5e5e5e;font-weight: 600;">A$0.00</span>
+                                    <span id="commissions" style="color: #5e5e5e;font-weight: 500;">A$0.00</span>
                                 </strong>
                             </div>
                             <div class="tultip-currency">
                                 <strong style="display:flex;justify-content: space-between;">
                                     <span style="color: #201f1f;">Delivery Date</span>
-                                    <span id="delivery_date" style="color: #5e5e5e;font-weight: 600;">Expected by 
+                                    <span id="delivery_date" style="color: #5e5e5e;font-weight: 500;">Expected by 
                                         <?php 
 											date_default_timezone_set('Australia/Melbourne');
                                             if(date("l") == "Wednesday" && date("H") > 12){
@@ -219,8 +236,8 @@
 
                             <div class="total-button" style="margin-top: 20px;border-top: 1px solid #dedede; padding-top: 20px;display: flex;justify-content: space-between;">
                                 <div class="total">
-                                    <p style="color:#000;font-size:16px;margin-bottom: 0;line-height: 20px;font-weight: 600;margin-top: 5px;">Total </p> 
-                                    <p style="color:rgb(92, 103, 123);font-size:16px;margin-top: 0;margin-bottom: 0;">A$ <span id="total_val">{{$dataHd[2]->fee + $apd_value}}</span></p>
+                                    <p style="color:#000;font-size:20px;margin-bottom: 0;line-height: 20px;margin-top: 5px;">Total </p> 
+                                    <p style="color:#000;font-size:20px;font-weight: 700;margin-top: 0;margin-bottom: 0;">A$ <span id="total_val">{{$dataHd[2]->fee + $apd_value}}</span></p>
                                 </div>
                                 <button id="Buy_Currency" class="btn btn-primary nextBtn btn-lg" type="button" onclick="return validate_ampunt();"> Buy Currency </button>
                             </div>
@@ -271,6 +288,7 @@
             dataType: "json",
             success: function(save_data) {
                 // console.log(save_data);
+                var delivery_rate = parseFloat($("#code_rate_1_hd_apd").html().replace( /[^\d\.]*/g, ''));
                 var code = save_data.all_data_array[0].code;
                 var flag = save_data.all_data_array[0].flag;
                 var country_name = save_data.all_data_array[0].currency;
@@ -291,16 +309,23 @@
                 var Recipients_amount_denom_ceil = Math.ceil(Recipients_amount_denom_fraction);
                 var minus_value_denom = Recipients_amount_denom_ceil - Recipients_amount_denom_fraction;
                 var mul_value_demon = minus_value_denom * min_denom;
-                var Recipients_amount = mul_value_demon + Recipients_amount_ceil;
+                var Recipients_amount = Math.ceil(mul_value_demon + Recipients_amount_ceil);
                 
                 var aud_value_fraction = Recipients_amount / rate;
                 var aud_value = aud_value_fraction.toFixed(2);
                 
                 $("#code_rate_1").html(rate+" "+code);
 			    $("#ctext1").val(Recipients_amount);
+			    
+// 		setTimeout(function(){
+//          	$("#ftext1").val(aud_value);
+//         }, 2000);
+			    
 			    $("#ftext1").val(aud_value);
                 $("#flag_hidden").val(flag);
                 $("#country_name_hidden").val(country_name);
+                $("#total_val").html((parseFloat(aud_value) + delivery_rate).toFixed(2));
+                $("#total_val_hidden").val((parseFloat(aud_value) + delivery_rate).toFixed(2));
             }
         });
 	}
