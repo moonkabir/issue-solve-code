@@ -48,6 +48,13 @@
         background: #fff !important;
         border: 1px solid #1333ae !important;
     }
+    select#Delivery_Method {
+        font-size: 16px;
+        margin: 0;
+        font-family: 'Muli', sans-serif;
+        color: #1333ae !important;
+        font-weight: 700;
+    }
     .btn .currency-flag, .dropdown-menu li .currency-flag {
         vertical-align: -3px;
         line-height: 16px;
@@ -101,18 +108,10 @@
     .tultip-currency {
         margin-bottom: 11px;
     }
-    /*select {*/
-    /*    -webkit-appearance: none;*/
-    /*    -moz-appearance: none;*/
-    /*    text-indent: 1px;*/
-    /*    text-overflow: '';*/
-    /*}*/
-    
     option:hover {
       background-color: yellow;
     }
     span.bs-caret{
-    /*.dropdown-toggle::after{*/
         display: none;
     }
     .for-amount {
@@ -123,7 +122,7 @@
         margin: 0;
         color: #000;
     }
-    @media only screen and (max-width: 480px) {
+    @media only screen and (max-width: 370px) {
         .au-amount-wrapper .au-amount-input,
         .country-amount-wrapper .for-amount-input {
             width: 60px !important;
@@ -132,11 +131,58 @@
         button.btn.dropdown-toggle.btn-default,
         .au-amount-field p,
         .tultip-currency,
-        #Buy_Currency {
+        .dropdown-flag span,
+        select#Delivery_Method,
+        .for-amount span{
             font-size: 12px !important;
         }
-        .total {
+        #Buy_Currency {
+            font-size: 16px !important;
+        }
+        .total p{
+            font-size: 18px !important;
+        }
+    }
+    @media (min-width: 371px) and (max-width: 400px) {
+        .au-amount-wrapper .au-amount-input,
+        .country-amount-wrapper .for-amount-input {
+            width: 65px !important;
             font-size: 14px;
+        }
+        button.btn.dropdown-toggle.btn-default,
+        .au-amount-field p,
+        .tultip-currency,
+        .dropdown-flag span,
+        select#Delivery_Method,
+        .for-amount span {
+            font-size: 14px !important;
+        }
+        #Buy_Currency {
+            font-size: 18px !important;
+        }
+        .total p{
+            font-size: 18px !important;
+        }
+    }
+    @media (min-width: 401px) and (max-width: 480px) {
+        .au-amount-wrapper .au-amount-input,
+        .country-amount-wrapper .for-amount-input {
+            width: 70px !important;
+            font-size: 16px;
+        }
+        button.btn.dropdown-toggle.btn-default,
+        .au-amount-field p,
+        .tultip-currency,
+        .dropdown-flag span,
+        select#Delivery_Method,
+        .for-amount span {
+            font-size: 16px !important;
+        }
+        #Buy_Currency {
+            font-size: 18px !important;
+        }
+        .total p{
+            font-size: 18px !important;
         }
     }
     @foreach ($data as $value)
@@ -149,10 +195,13 @@
     $apd_value_initial = 3000;
     $usd_value_fraction = $first_rate[0]->rate3 * $apd_value_initial;
     $usd_value_ceil = ceil($usd_value_fraction);
-    $minus_value = $usd_value_ceil - $usd_value_fraction;
-    $divided_value = $minus_value / $first_rate[0]->rate3;
-    $apd_value = $apd_value_initial + $divided_value;
-    $apd_value = round($apd_value,2);
+    $Recipients_amount_denom_fraction = $usd_value_ceil / $first_rate[0]->min_denom;
+    $Recipients_amount_denom_ceil = ceil($Recipients_amount_denom_fraction);
+    $minus_value_denom = $Recipients_amount_denom_ceil - $Recipients_amount_denom_fraction;
+    $mul_value_demon = $minus_value_denom * $first_rate[0]->min_denom;
+    $Recipients_amount = ceil($mul_value_demon + $usd_value_ceil);
+    $aud_value_fraction = $Recipients_amount / $first_rate[0]->rate3;
+    $apd_value = round($aud_value_fraction,2);
 ?>
 <form name="form" id='frm' action="https://buy.daneshexchange.com" method="post"  target="_parent">
     <div class="row setup-content" id="step-1">
@@ -183,7 +232,7 @@
                                     </select>
                                 </div>
                                 <div class="for-amount">
-                                    <input name="foreign_amount" id="ctext1" maxlength=10 value="{{ $usd_value_ceil }}" class="for-amount-input" oninput="recipient_price_calculate()"><br/>
+                                    <input name="foreign_amount" id="ctext1" maxlength=10 value="{{ $Recipients_amount }}" class="for-amount-input" oninput="recipient_price_calculate()"><br/>
                                 </div>
                             </div>
                             <div class="country-amount-label">
@@ -202,20 +251,20 @@
                             <div class="tultip-currency">
                                 <strong style="margin-top: 25px;display:flex;justify-content: space-between;">
                                     <span style="color: #201f1f;">Rate</span>
-                                    <span id="code_rate_1" style="color: #5e5e5e;font-weight: 500;">{{$first_rate[0]->rate3}} USD</span>
+                                    <span id="code_rate_1" style="color: #383838;font-weight: 500;">{{$first_rate[0]->rate3}} USD</span>
                                 </strong>
                             </div>
 
                             <div class="tultip-currency">
                                 <strong style="display:flex;justify-content: space-between;">
                                     <span style="color: #201f1f;">Commissions/fees</span>
-                                    <span id="commissions" style="color: #5e5e5e;font-weight: 500;">A$0.00</span>
+                                    <span id="commissions" style="color: #383838;font-weight: 500;">A$0.00</span>
                                 </strong>
                             </div>
                             <div class="tultip-currency">
                                 <strong style="display:flex;justify-content: space-between;">
                                     <span style="color: #201f1f;">Delivery Date</span>
-                                    <span id="delivery_date" style="color: #5e5e5e;font-weight: 500;">Expected by 
+                                    <span id="delivery_date" style="color: #383838;font-weight: 500;">Expected by 
                                         <?php 
 											date_default_timezone_set('Australia/Melbourne');
                                             if(date("l") == "Wednesday" && date("H") > 12){
@@ -239,7 +288,7 @@
                                     <p style="color:#000;font-size:20px;margin-bottom: 0;line-height: 20px;margin-top: 5px;">Total </p> 
                                     <p style="color:#000;font-size:20px;font-weight: 700;margin-top: 0;margin-bottom: 0;">A$ <span id="total_val">{{$dataHd[2]->fee + $apd_value}}</span></p>
                                 </div>
-                                <button id="Buy_Currency" class="btn btn-primary nextBtn btn-lg" type="button" onclick="return validate_ampunt();"> Buy Currency </button>
+                                <button id="Buy_Currency" class="btn btn-primary nextBtn btn-lg" type="button" onclick="return validate_ampunt();"> BUY NOW  <i class="fa fa-chevron-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -300,27 +349,18 @@
                 }else{
                     var rate = save_data.all_data_array[0].rate;
                 }
-                
                 var Recipients_amount_fraction = rate * price;
                 var Recipients_amount_ceil = Math.ceil(Recipients_amount_fraction);
-                
                 //-----------------for denom-----------------
                 var Recipients_amount_denom_fraction = Recipients_amount_ceil / min_denom;
                 var Recipients_amount_denom_ceil = Math.ceil(Recipients_amount_denom_fraction);
                 var minus_value_denom = Recipients_amount_denom_ceil - Recipients_amount_denom_fraction;
                 var mul_value_demon = minus_value_denom * min_denom;
                 var Recipients_amount = Math.ceil(mul_value_demon + Recipients_amount_ceil);
-                
                 var aud_value_fraction = Recipients_amount / rate;
                 var aud_value = aud_value_fraction.toFixed(2);
-                
                 $("#code_rate_1").html(rate+" "+code);
 			    $("#ctext1").val(Recipients_amount);
-			    
-// 		setTimeout(function(){
-//          	$("#ftext1").val(aud_value);
-//         }, 2000);
-			    
 			    $("#ftext1").val(aud_value);
                 $("#flag_hidden").val(flag);
                 $("#country_name_hidden").val(country_name);
