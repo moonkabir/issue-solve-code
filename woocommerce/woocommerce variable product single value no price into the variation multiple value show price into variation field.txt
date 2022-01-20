@@ -1,37 +1,38 @@
+$prices_result_length = 0;
+add_action( 'woocommerce_before_variations_form', 'merchshark_woocommerce_output_related_products', 20 ); 
+function merchshark_woocommerce_output_related_products(){
+	global $product, $prices_result_length;
+	for ($i = 0; $i < count($product->get_available_variations()); $i++) {
+		$available_variations = $product->get_available_variations();
+		$variation_id = $available_variations[$i]['variation_id'];
+		$variable_product1 = new WC_Product_Variation($variation_id);
+		$merchshark_variation_product_price[$i] = $variable_product1->price;
+	}
+	$prices_result = array_unique($merchshark_variation_product_price);
+    $prices_result_length = count($prices_result);
+}
 add_filter('woocommerce_variation_option_name', 'display_price_in_variation_option_name');
 function display_price_in_variation_option_name($term){
-	if (is_product()) {
-		global $product, $wpdb;
-		for ($i = 0; $i < count($product->get_available_variations()); $i++) {
-			$available_variations = $product->get_available_variations();
-			$variation_id = $available_variations[$i]['variation_id'];
-			$variable_product1 = new WC_Product_Variation($variation_id);
-			$prices[$i] = $variable_product1->price;
-		}
-		$prices_result = array_unique($prices);
-		$result = $wpdb->get_col("SELECT slug FROM {$wpdb->prefix}terms WHERE name = '$term'");
-		$term_slug = (!empty($result)) ? $result[0] : $term;
-		$query = "SELECT postmeta.post_id AS product_id
-				FROM {$wpdb->prefix}postmeta AS postmeta
-					LEFT JOIN {$wpdb->prefix}posts AS products ON ( products.ID = postmeta.post_id )
-				WHERE postmeta.meta_key LIKE 'attribute_%'
-					AND postmeta.meta_value = '$term_slug'
-					AND products.post_parent = $product->id";
-		$variation_id = $wpdb->get_col($query);
-		$parent = wp_get_post_parent_id($variation_id[0]);
-		if ($parent > 0) {
-			$_product = new WC_Product_Variation($variation_id[0]);
-			$_currency = get_woocommerce_currency_symbol();
-			$stock = $_product->is_in_stock() ? 'På lager' : 'Ikke på lager';
-			if (count($prices_result) == 1) {
-				return $term . ' &nbsp;- &nbsp;' . $stock;
-			} else {
-				return $term . ' (' . $_product->get_price()  . ' ' . $_currency . ') &nbsp;- &nbsp;' . $stock;
-			}
-		} else {
-			return $term;
-		}
-	}else{
-		return $term;
-	}
+    global $wpdb, $product;
+    $result = $wpdb->get_col("SELECT slug FROM {$wpdb->prefix}terms WHERE name = '$term'");
+    $term_slug = (!empty($result)) ? $result[0] : $term;
+    $query = "SELECT postmeta.post_id AS product_id
+                FROM {$wpdb->prefix}postmeta AS postmeta
+                    LEFT JOIN {$wpdb->prefix}posts AS products ON ( products.ID = postmeta.post_id )
+                WHERE postmeta.meta_key LIKE 'attribute_%'
+                    AND postmeta.meta_value = '$term_slug'
+                    AND products.post_parent = $product->id";
+    $variation_id = $wpdb->get_col($query);
+    $parent = wp_get_post_parent_id($variation_id[0]);
+    if ($parent > 0) {
+        $_product = new WC_Product_Variation($variation_id[0]);
+        $_currency = get_woocommerce_currency_symbol();
+        $stock = $_product->is_in_stock() ? 'På lager' : 'Ikke på lager';
+        if ($prices_result_length == 1) {
+            return $term . ' &nbsp;- &nbsp;' . $stock;
+        } else {
+            return $term . ' (' . $_product->get_price()  . ' ' . $_currency . ') &nbsp;- &nbsp;' . $stock;
+        }
+    }
+    return $term;
 }
