@@ -1,3 +1,4 @@
+// -----------------single product variation price into the variation select -------------
 $prices_result_length = 0;
 add_action( 'woocommerce_before_variations_form', 'merchshark_woocommerce_output_related_products', 20 ); 
 function merchshark_woocommerce_output_related_products(){
@@ -13,7 +14,7 @@ function merchshark_woocommerce_output_related_products(){
 }
 add_filter('woocommerce_variation_option_name', 'display_price_in_variation_option_name');
 function display_price_in_variation_option_name($term){
-    global $wpdb, $product;
+    global $wpdb, $product, $prices_result_length;
     $result = $wpdb->get_col("SELECT slug FROM {$wpdb->prefix}terms WHERE name = '$term'");
     $term_slug = (!empty($result)) ? $result[0] : $term;
     $query = "SELECT postmeta.post_id AS product_id
