@@ -1,0 +1,6 @@
+jQuery(document).click(function(e){
+    if(! jQuery(e.target).is(".wof-wrapper") && ! jQuery(e.target).closest(".wof-wrapper").length)
+        alert("you clicked out side content area");
+    else 
+        alert("inside content area");
+});
