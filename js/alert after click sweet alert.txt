@@ -1,0 +1,7 @@
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>		
+swal({
+   title: save_data.data,
+   icon: "success",
+}).then(function() {
+   location.reload(true);
+});
