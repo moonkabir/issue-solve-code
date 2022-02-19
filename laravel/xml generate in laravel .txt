@@ -1,0 +1,42 @@
+public function Order_Currency_Details($Refno){
+        $cart_details = DB::table('cart_details as a')
+                        ->where('a.reference_no','=',$Refno)
+                        ->leftjoin('orders as b', 'b.reference_no', '=', 'a.reference_no')
+                        ->select('b.id','a.session_id as sessionid','a.australian_amount as aud_value','a.foreign_amount as currency_value','a.country_name as countryname','a.country_code as currencycode','a.unit_price as unitprice','b.store_id','a.denom','b.payment_received','a.stock','a.order_ready','a.order_waiting',DB::raw("CONCAT_WS( ' ',b.delivery_address, b.delivery_city, b.delivery_state, b.delivery_postal_code) as store_name"))
+                        ->get();
+        $orders = DB::table('orders')->where('reference_no','=',$Refno)->get();
+        $customer_details = DB::table('customer_details as a')
+                            ->where('a.id','=',$orders[0]->customer_id)
+                            ->leftjoin('orders as b', 'b.customer_id', '=', 'a.id')
+                            ->where('b.reference_no','=',$Refno)
+                            ->leftjoin('green_id_kyc_watchlist as c', 'c.verification_id', '=', 'a.verification_id')
+                            ->select('a.id','a.session_id as sessionid','b.delivery_date as cdate','a.salutation as title','a.first_name as fname','a.middle_name as mname','a.last_name as lname','a.telephone as tel','a.alternative_telephone as atel', 'a.email_address as email', 'a.residental_address as address', 'a.caddress as digital_address', 'a.streetName as suburb', 'a.city', 'a.state', 'a.postal_code as postcode', 'a.birth_date as dob', 'c.VERIFIED as idtype', 'a.first_verification_id_expiry_date as cissue', 'a.verification_id as idnumber', 'a.first_verification_id_expiry_date as expdate', 'b.reference_no as refno', 'b.final_total as totalamount','b.payment_status as status','b.payment_type','b.payment_id as bank_refno','b.payment_received as pay_received','b.transaction_id','b.created_at as order_date','b.payment_error_message as error_details','b.delivery_type','a.second_verification_id_no as cc_number','a.second_verification_id_no as cc_exp','a.second_verification_id_no as name_card','b.delivery_city as d_city','b.delivery_state as d_state','b.delivery_postal_code as d_postcode','b.bank_transfer_charges as surcharge','b.sub_total as subtotal','b.delivery_charges as dev_fee','a.verification_status as kyc_status',DB::raw("CONCAT_WS( ' ',c.NOT_FOUND_ON_LIST, c.FOUND_ON_LIST, c.VERIFIED, c.AUTOFAIL) as kyc_details"),'b.notes','b.tracking','b.order_digit','b.order_dep','b.digit_dep','b.order_der','b.digit_der','b.delivery_postal_code as postal_address','a.is_existing_customer as existing_cs','a.browser_details as browsers_details')
+                            ->get();
+        
+        $xmlDom = new DOMDocument();
+        $xmlDom->appendChild($xmlDom->createElement('TransactionDetails'));
+        $xmlRoot = $xmlDom->documentElement;
+        
+        foreach($cart_details as $row){
+    		$xmlRowElementNode = $xmlDom->createElement('row');
+            for($i=0;$i<count(array_values((array)$row));$i++){
+				$xmlRowElement = $xmlDom->createElement(array_keys((array)$row)[$i]);
+                $xmlText = $xmlDom->createTextNode(array_values((array)$row)[$i]);
+                $xmlRowElement -> appendChild($xmlText);
+                $xmlRowElementNode->appendChild($xmlRowElement);
+            }
+            $xmlRoot->appendChild($xmlRowElementNode);
+    	}
+    	foreach($customer_details as $row){
+    		$xmlRowElementNode = $xmlDom->createElement('customer');
+            for($i=0;$i<count(array_values((array)$row));$i++){
+				$xmlRowElement = $xmlDom->createElement(array_keys((array)$row)[$i]);
+                $xmlText = $xmlDom->createTextNode(array_values((array)$row)[$i]);
+                $xmlRowElement -> appendChild($xmlText);
+                $xmlRowElementNode->appendChild($xmlRowElement);
+            }
+            $xmlRoot->appendChild($xmlRowElementNode);
+    	}
+    	header('Content-type:  text/xml');
+        echo $xmlDom->saveXML();
+    }
