@@ -1,0 +1,9 @@
+Build the post data in a normal array with the appropriate data...
+$postData = [ body = Dear customer, Your application success.,
+    to = $toNumber,
+    sender_id = Bank,
+    callback_url = mydomain.com
+];
+pass a json_encoded string to the post fields (update this line)...
+
+CURLOPT_POSTFIELDS = json_encode($postData),
