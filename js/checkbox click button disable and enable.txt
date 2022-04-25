@@ -1,0 +1,5 @@
+        var checker = document.getElementById("checkbox"+id);
+        var sendbtn = document.getElementById('CreateMultiLabel');
+        checker.onchange = function() {
+            sendbtn.disabled = !!this.checked;
+        };
