@@ -1,0 +1,15 @@
+const checkbox = [];
+        <?php foreach($data as $rows_res){ ?>
+        if($("#checkbox<?php echo $rows_res->reference_id; ?>").prop('checked') == true){
+            checkbox.push($("#checkbox<?php echo $rows_res->reference_id; ?>").val());
+        }
+        <?php } ?>
+        var sendbtn = document.getElementById('CreateMultiLabel');
+        var sendbtn2 = document.getElementById('CreateMultiShipment');
+        if(checkbox.length>0){
+            sendbtn.disabled = true;
+            sendbtn2.disabled = true;
+        }else{
+            sendbtn.disabled = false;
+            sendbtn2.disabled = false;
+        }
