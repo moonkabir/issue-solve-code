@@ -1,0 +1,1 @@
+rawurlencode($orderDetail->delivery_state)
