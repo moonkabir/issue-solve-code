@@ -1,0 +1,18 @@
+$token_url = "Token Url";
+$client_id = "your App Client ID";
+$client_secret = "Your Secret";
+$content = "grant_type=client_credentials";
+$authorization = base64_encode("$client_id:$client_secret");
+$header = array("Authorization: Basic {$authorization}","Content-Type: application/x-www-form-urlencoded");
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => $token_url,
+    CURLOPT_HTTPHEADER => $header,
+    CURLOPT_SSL_VERIFYPEER => false,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => $content
+));
+$response = curl_exec($curl);
+curl_close($curl);
+echo $curl;
