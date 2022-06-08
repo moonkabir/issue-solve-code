@@ -1,0 +1,12 @@
+From Command: 
+
+php artisan storage:link
+
+Form Route:
+
+Route::get('/storage-link', function(){
+    $target = storage_path('app/public');
+    $link = public_path('/storage');
+    symlink($target, $link);
+    echo "symbolic link created successfully";
+});
