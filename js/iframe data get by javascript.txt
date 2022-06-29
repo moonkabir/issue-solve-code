@@ -1,0 +1,12 @@
+const iFrame = document.querySelector('#ppIframeWidget-parcelpoint-widgeat').contentWindow.document;
+            const title = iFrame.getElementsByClassName("title")[0].innerHTML;
+            const street = iFrame.getElementsByClassName("street")[0].innerHTML;
+            const location = iFrame.getElementsByClassName("location")[0].innerHTML;
+            const open_short = iFrame.getElementsByClassName("open-short")[0].innerHTML;
+
+            // $('storeText').html(title+''+street+''+location+''+open_short);
+            
+            console.log(title);
+            console.log(street);
+            console.log(location);
+            console.log(open_short);
