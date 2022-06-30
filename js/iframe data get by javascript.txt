@@ -20,6 +20,15 @@ const iFrame = document.querySelector('#ppIframeWidget-parcelpoint-widgeat').con
             const location = iFrame.querySelector(".header-store-selected .location").innerHTML;
             $('#storeText').html(title+''+street+''+location);            
         }, 1000);
-        
-            
+        //--------- you may also check condition ---------- 
+        setInterval(function(){ 
+            const iFrame = document.querySelector('#ppIframeWidget-parcelpoint-widgeat').contentWindow.document;
+            const title2 = iFrame.querySelector(".header-store-selected .title");
+            if(title2 != null){
+                const title = iFrame.querySelector(".header-store-selected .title").innerHTML;
+                const street = iFrame.querySelector(".header-store-selected .street").innerHTML;
+                const location = iFrame.querySelector(".header-store-selected .location").innerHTML;
+                $('#storeText').html(title+''+street+''+location);
+            }
+        }, 1000);    
   
