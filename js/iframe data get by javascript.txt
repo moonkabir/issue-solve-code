@@ -10,3 +10,16 @@ const iFrame = document.querySelector('#ppIframeWidget-parcelpoint-widgeat').con
             console.log(street);
             console.log(location);
             console.log(open_short);
+            
+            
+        //--------- you may also use query selector ---------- 
+        setInterval(function(){ 
+            const iFrame = document.querySelector('#ppIframeWidget-parcelpoint-widgeat').contentWindow.document;
+            const title = iFrame.querySelector(".header-store-selected .title").innerHTML;
+            const street = iFrame.querySelector(".header-store-selected .street").innerHTML;
+            const location = iFrame.querySelector(".header-store-selected .location").innerHTML;
+            $('#storeText').html(title+''+street+''+location);            
+        }, 1000);
+        
+            
+  
