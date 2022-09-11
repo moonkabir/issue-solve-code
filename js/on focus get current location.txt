@@ -1,0 +1,19 @@
+<!-- comment for stop on focus get current location  -->
+<input class="form-control-rd-br-hf autocomplete2" type="text" name="address" id="autocomplete2" onFocus="geolocate()" value="{{ old('address') ?? $getUProfile['address'] }}" placeholder="@lang('Start Typing address here')" autocomplete="disabled">
+
+    google.maps.event.addDomListener(window, "load", initAutocomplete);
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+            var geolocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            var circle = new google.maps.Circle({
+                center: geolocation,
+                radius: position.coords.accuracy
+            });
+            autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
