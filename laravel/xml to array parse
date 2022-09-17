@@ -1,0 +1,24 @@
+    <?php
+        $AGENT_CODE = "DED12";
+        $USER_ID = "api_danesh_user";
+        $AGENT_SESSION_ID = $request->_token;
+        $CATALOGUE_TYPE = "CTY";
+        $Password = "kcgPchh2v5YzB(J";
+        $string = $AGENT_CODE.$USER_ID.$AGENT_SESSION_ID.$CATALOGUE_TYPE.$Password;
+        $hash = hash('sha256', $string);
+        
+        $client = new SoapClient('https://demo.ipayremitworldwide.com/sendwsv4/webservice.asmx?WSDL', array('trace' => 1));
+        $parameters = array(
+            'AGENT_CODE' => $AGENT_CODE,
+            'USER_ID' => $USER_ID,
+            'AGENT_SESSION_ID' => $AGENT_SESSION_ID,
+            'CATALOGUE_TYPE' => $CATALOGUE_TYPE,
+            'ADDITIONAL_FIELD1' => '',
+            'ADDITIONAL_FIELD2' => '',
+            'ADDITIONAL_FIELD3' => '',
+            'SIGNATURE' => $hash
+        );
+        $result = $client->GetCatalogue($parameters)->GetCatalogueResult->Return_CATALOGUE;
+        
+        echo "<pre>";
+        print_r($result); 
