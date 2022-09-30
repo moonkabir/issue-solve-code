@@ -1,0 +1,40 @@
+$currencyData = file_get_contents("https://buy.daneshexchange.com/api/all_calculator");
+?>
+<script>
+	function file_get_contents(filename) {
+		fetch(filename).then((resp) => resp.text()).then(function(data) {
+			document.getElementById("calculator_body").innerHTML = data;
+			document.getElementById("calculator_loader").innerHTML = "";
+		});
+	}
+	file_get_contents("https://buy.daneshexchange.com/api/all_calculator/");
+</script>
+	
+	
+	
+<style>
+	#calculator_loader {
+		position: absolute;
+		z-index: 9;
+		background: transparent;
+		width: 93.5%;
+		height: 96%;
+	}
+
+	#calculator_loader i.fa.fa-spinner.fa-spin {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		font-size: 50px;
+		transform: translate(-50%,-50%);
+	}
+	#calculator_body {
+		position: relative;
+	}
+</style>	
+<div class="col-sm-12">
+	<div id="calculator_body" class='calculator-body'>	
+		<span id="calculator_loader"><i class="fa fa-spinner fa-spin"></i></span>
+		<?php print_r($currencyData); ?>
+	</div>
+</div>
