@@ -1,0 +1,901 @@
+<div class="clerk_content_wrap search">
+    <div class="clerk_search_heading_wrapper">
+        <h3 class="clerk_content_headline">Viser {{ count }} resultater for: '{{ query }}'</h3>
+        <div class="hidden_options_wrapper">
+            <div id="clerk-facet-mobile-toggle" onclick="facetMobileToggle();">Filtre</div>
+            <div class="clerk_absolute">
+                <div class="clerk_sort_wrapper">
+                    <select class="clerk_sort_select" onchange="clerkSorting(this.options[ this.selectedIndex ].value, event);">
+                        <option value="" disabled selected>Sorter</option>
+                        <option value="null_null">Bedstsælgende</option>
+                        <option value="asc_name">Navn (A - Å)</option>
+                        <option value="desc_name">Navn (Å - A)</option>
+                        <option value="asc_price">Pris (lav til høj)</option>
+                        <option value="desc_price">Pris (høj til lav)</option>
+                        <option value="asc_age">Nyeste</option>
+                        <option value="desc_age">Ældste</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% assign currency_symbol = 'Kr.' %}
+    <!-- The class clerk-grid transforms the HTML into a slider, removing this class disables Clerk grid framework -->
+    <div class="clerk-grid clerk_grid_wrap">
+        {% for product in products %}
+        {% assign clerk_min_variant_price = product.variant_prices | min %}
+        {% assign clerk_max_variant_price = product.variant_prices | max %}
+        <div class="clerk_product_tile_wrap" age="{{product.age}}" >
+            <div class="clerk_product_tile_s">
+                <!-- Replace Inner Contents, to keep slider framework -->
+                <a class="clerk_link" href="{{ product.url }}">
+                    <div class="clerk_image_wrapper">
+                        <img class="clerk_product_image" src="{{ product.image }}" />
+                        {% comment %}
+                       For a hover image, use  <img class="clerk_product_hover_image" src="{{ product.images | nth 1 }}" />
+                       {% endcomment %}
+                        {% if product.price < product.list_price %} <!-- | pct allows you to get the percentage difference between any 2 numerical values -->
+                            <div class="clerk_product_badge offer">-{{ product.price | pct product.list_price }}%</div>
+                        {%endif%}
+            </div>
+            </a>
+            <div class="clerk_product_info_wrap">
+                        <a class="clerk_link" href="{{ product.url }}">
+                            <p class="clerk_product_name"> {{product.name}} </p>
+                        </a>
+                        <div class="clerk_product_price_wrap">
+                            {% if clerk_min_variant_price < clerk_max_variant_price %}
+                        <div class="clerk_product_price now"> {{ clerk_min_variant_price | money_eu 2 "." ","  }} {{ currency_symbol }} - {{clerk_max_variant_price | money_eu 2 "." "," }} {{ currency_symbol }} </div>
+                    {% else %}
+          
+                    {% if product.price < product.list_price %}
+                <!-- | money_eu formatter takes 3 arguments: number of decimals, thousand separator, decimal separator. Can also be used with no arguments, will default to 2 decimal places. -->
+                <div class="clerk_product_price now"> {{ product.price | money_eu 2 "." ","  }} {{ currency_symbol }}</div>
+                <div class="clerk_product_price before"> {{ product.list_price | money_eu 2 "." "," }} {{ currency_symbol }}</div>
+            
+            {% else %} 
+            <div class="clerk_product_price now"> {{ product.price | money_eu 2 "." "," }} {{ currency_symbol }}</div> 
+            {% endif %} 
+            {% endif %} 
+            </div>
+            </div>
+            {%assign outofstock = 'outofstock'%}
+            {% if product.variant_options && product.stock_status == 'instock' %}
+         <a class="clerk_product_cta" href="{{ product.url }}"> Vælg muligheder </a>
+         {% else %} 
+         {% if product.stock_status == outofstock %}
+         <a class="clerk_product_cta out" href="{{ product.url }}"> Modtag email </a>
+         {% else %}
+         <a class="clerk_product_cta" href="?add-to-cart={{ product.id }}"> Tilføj Til Kurv </a>
+         {% endif %}
+         {% endif %}
+            
+                
+                <!-- Replace Inner Contents, to keep slider framework -->
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if count > products.length %}
+    <div class="clerk_load_more_btn" onclick="Clerk('content', '#{{ content.id }}', 'more', 20);"> INDLÆS FLERE PRODUKTER </div>
+    {%endif%}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+<div class="container brand_icon" style="margin-top: 50px;">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../fortnite-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Fortnite-Merchandise.png" alt="Fortnite"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../minecraft-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Minecraft.png" alt="Minecraft"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../pokemon-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Pokemon.png" alt="Pokemon"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../gurli-gris-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Gurli-Gris-merchandise.png" alt="Gurli Gris"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../paw-patrol-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Paw-Patrol.png" alt="Paw-Patrol"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../disney-frozen-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Frozen.png" alt="Frozen"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../transformers-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/transformers.png" alt="transformers"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../pyjamasheltene-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Pyjamasheltene.png" alt="Pyjamasheltene"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../harry-potter-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/harrypotter.png" alt="harry-potter"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../marvel-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Marvel.png" alt="Marvel"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../spiderman-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Spiderman.png" alt="Spiderman"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../hulk-legetoej/"><img src="../wp-content/themes/merchshark/assets/images/hulk.png" alt="Hulk"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../deadpool-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Deadpool.png" alt="Deadpool"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../venom-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Venom.png" alt="Venom"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../star-wars-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Star-Wars.png" alt="Star-Wars"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../the-mandalorian-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/The-mandalorian.png" alt="the-mandalorian-merchandise"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../roblox-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Roblox.png" alt="Roblox"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../among-us-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/among-us-merch.png" alt="Among-Us"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../dc-comics-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Dc-comics.png" alt="Dc-comics"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../ben-10-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/ben10.png" alt="ben10"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../super-mario-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Super-Mario-merchandise.png" alt="Super-Mario-merchandise"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../game-of-thrones-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Game-Of-Thrones-GOT.png" alt="GOT"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../rick-and-morty-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Rick-and-Morty.png" alt="Rick-and-Morty"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../overwatch-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Overwatch.png" alt="Overwatch"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../dragonball-z-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Dragonball-z-dbz.png" alt="Dragonball"></a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6 image-wrapper">
+            <a href="../star-wars-merchandise/"><img src="../wp-content/themes/merchshark/assets/images/Fodbold.png" alt="Fodbold"></a>
+        </div>
+    </div>
+</div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</div>
+<script>
+
+
+// Function to toggle display of .clerk-facets overall
+    // Function to toggle sorting of results based on option in .clerk_sort_select.
+    // The function takes the value of the option and splits it by _.
+    // The value should always be either asc or desc followed by _ and the attribute key.
+    // The only exception to this is the default sorting which is defined as null_null.
+    function clerkSorting(val, event) {
+        or = (val.split('_')[0] == 'null') ? eval(val.split('_')[0]) : val.split('_')[0];
+        orb = (val.split('_')[1] == 'null') ? eval(val.split('_')[1]) : val.split('_')[1];
+        param_sort = val;
+        Clerk('content', '[data-target][data-query][data-template][data-clerk-content-id]', 'param', {
+            orderby: orb,
+            order: or
+        });
+    }
+    // Change value in select element to currently active choice, since element rerenders upon initial user input.
+    // Without it will show the first option nominally regardless of the current ordering in effect.
+    if (!param_sort) {
+        var param_sort;
+    } else {
+        if (param_sort.length > 0) {
+            document.querySelector('.clerk_sort_select').value = param_sort;
+        }
+    }
+    
+
+if(window.screen.width < 820){
+    jQuery("#clerk-search-filters").appendTo(".clerk_search_heading_wrapper");}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+#clerk-search-page-wrap{
+    display: flex;
+    flex-direction: row;
+    margin-top:2em;
+}
+
+.clerk-facets{
+    min-width:205px;
+}
+
+.modules.productlist .row{
+    display:none;
+}
+
+.modules.productlist{
+    display:flex;
+    flex-direction: row-reverse;
+}
+
+/* hide their search page */
+.modules.angular-productlist{
+    display:none;
+}
+/* hide their search page */
+
+.clerk_sale{
+    background: #ce0d24!important;
+    color: #fff!important;
+    border: 2px solid #ce0d24;
+    font-size: 16px!important;
+    text-transform: uppercase;
+    padding: 2px 25px!important;
+    border-radius: 0px!important;
+    left: 0px!important;
+    top: 20px!important;
+    font-weight: 700!important;
+    position: absolute;
+}
+
+.clerk_sort_wrapper {
+    position: relative;
+    border-bottom: 1px solid #eee;
+}
+
+.clerk_sort_wrapper:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    width: 28px;
+    height: 28px;
+    text-align: center;
+    line-height: 28px;
+    font-family: prisma;
+    color: #dcdde0;
+    transform: translateY(-50%) rotate(0deg);
+    transition: 0.3s ease-in-out;
+    font-size: 18px;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.clerk_sort_wrapper:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 22px;
+    width: 8px;
+    height: 8px;
+    text-align: center;
+    border: 1px solid #333;
+    border-width: 0 2px 2px 0;
+    font-size: 10px;
+    color: #dcdde0;
+    transform: translateY(calc(-50% - 5px)) rotate(45deg);
+    transition: 0.3s ease-in-out;
+    font-size: 18px;
+    z-index: 1;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.clerk_sort_select {
+    margin-bottom: 0px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    color: #212529;
+    letter-spacing: 1px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+    padding: 15px 45px 15px 15px;
+    text-transform: uppercase;
+    text-align: left;
+    border: none;
+    width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.clerk_sort_select:focus-visible {
+    outline: none;
+}
+
+.clerk_sort_select option {
+    border: 1px solid #eee;
+    border-radius: 0;
+}
+
+.clerk_sort_select:focus {
+    border: none;
+    border-top: 1px solid #eee;
+}
+
+.clerk_search_heading_wrapper {
+    position: relative;
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+.clerk_absolute {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 200px;
+    border: 1px solid black;
+    border-radius: 2px;
+
+}
+
+@media screen and (max-width: 800px) {
+    .clerk_absolute {
+        position: initial;
+        top: initial;
+        right: initial;
+        transform: none;
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+    .clerk_search_heading_wrapper {
+        flex-direction: column;
+    }
+    .hidden_options_wrapper {
+        display: grid;
+        -moz-column-gap: 20px;
+        column-gap: 20px;
+        row-gap: 20px;
+        position: relative;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        -ms-grid-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 400px) {
+    
+        .hidden_options_wrapper {
+        display: grid;
+    }
+}
+
+.search .clerk_content_headline {
+    display: inline-flex;
+    align-items: center;
+    flex-flow: row wrap;
+    justify-content: center;
+    max-width: 40ch;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    white-space: break-spaces;
+    font-size: 26px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-weight: 400;
+    text-align: center;
+    color: black;
+    height: 55px;
+    border-bottom: 1px dotted #000000;
+    margin: 0 auto;
+    line-height: initial;
+}
+
+@media screen and (max-width: 415px) {
+        .search .clerk_content_headline {
+        border-bottom: none !important;
+        margin-bottom: 1em;
+    }
+}
+
+@media screen and (max-width: 790px) {
+    .search .clerk_content_headline {
+        border-bottom: none !important;
+        margin-bottom: 1em;
+    }
+}
+
+@media screen and (min-width:801px) and (max-width: 1280px) {
+    .search .clerk_content_headline {
+        display: inline-flex;
+        align-items: flex-start;
+        text-align: left;
+        max-width: calc(100% - 210px);
+        width: calc(100% - 210px);
+        margin: 0;
+        flex-flow: column;
+        justify-content: center;
+    }
+}
+
+.clerk_content_wrap * {
+    font-family: "Lato", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.clerk-grid {
+    width: 100%;
+    display: grid;
+    -moz-column-gap: 20px;
+    column-gap: 20px;
+    row-gap: 20px;
+    position: relative;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    -ms-grid-columns: repeat(4, minmax(0, 1fr));
+}
+
+.clerk_content_wrap {
+    margin: 1em auto;
+}
+
+.clerk_product_tile_wrap {
+    width: 100%;
+}
+
+@media screen and (max-width: 415px) {
+#clerk-search-results{
+    padding-inline-start: inherit !important;
+}
+}
+
+@media screen and (max-width: 790px) {
+#clerk-search-results{
+    padding-inline-start: inherit !important;
+}
+}
+
+
+
+@media screen and (max-width: 400px) {
+    .clerk-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        -ms-grid-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media screen and (min-width: 401px) and (max-width: 620px) {
+    .clerk-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        -ms-grid-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media screen and (min-width: 621px) and (max-width: 940px) {
+    .clerk-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        -ms-grid-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media screen and (min-width: 941px) and (max-width: 1160px) {
+    .clerk-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        -ms-grid-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .clerk-facets {
+        display: none;
+    }
+}
+
+.clerk_container {
+    display: block;
+    width: 100%;
+}
+
+.clerk_product_info_wrap {
+    padding: 2px;
+    border-radius: 1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    min-height: 0;
+        height: auto;
+}
+
+.clerk_product_info_wrap .clerk_link {
+    border-width: 1px 0px 1px 0px;
+    transition: 0.3s ease;
+    min-height: 0;
+        height: auto;
+    justify-content: start;
+}
+
+.clerk_product_info_wrap>* {
+    padding: 0 0;
+}
+
+.clerk_link {
+    border-bottom: none;
+    display: inherit;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+    padding: 0;
+}
+
+.clerk_link:hover {
+    -webkit-filter: contrast(105%);
+    filter: contrast(105%);
+}
+
+.clerk_content_headline {
+    max-width: 100%;
+    width: 100%;
+    font-size: 26px;
+    text-align: center;
+    color: inherit;
+    height: 3em;
+    line-height: 3em;
+    margin: 0 auto;
+}
+
+.clerk_product_tile_s {
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 0px;
+    margin: 0;
+    box-sizing: border-box;
+    min-width: 100%;
+    max-width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    text-align: center;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    height: 100%;
+}
+
+.clerk_product_badge.offer {
+    display:block;
+    position:absolute;
+    top: 0px;
+    left: 0px;
+    width: 45px;
+    height: 25px;
+    border-radius:0rem; /* Needed to ensure it never rounds corners more than 50% */
+    background: #ff0000;
+    color:#fff;
+    font-weight:bold;
+    line-height:17px;
+    font-size:14px;
+    border:4px solid #ff0000;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
+}
+
+.clerk_product_badge.new {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 999rem;
+    background: #f9f9f9;
+    color: #333;
+    font-weight: bold;
+    line-height: 3rem;
+    border: 4px solid #333;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
+}
+
+.clerk_image_wrapper {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: auto;
+    border:1px solid #eee;
+}
+
+.clerk_image_wrapper:hover .clerk_product_hover_image {
+    opacity: 1;
+    transition: 0.3s ease-in;
+}
+
+
+
+.clerk_image_wrapper .clerk_product_hover_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: auto;
+}
+
+.clerk_product_hover_image {
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    -o-object-fit: contain;
+    object-fit: contain;
+    /*Change the max height value below to 100% if the client has consistent image sizes */
+    max-height: 200px;
+    width: 100%;
+    max-width: 100%;
+    height: 200px;
+    opacity: 0;
+}
+
+.clerk_product_image {
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    -o-object-fit: contain;
+    object-fit: contain;
+    /*Change the max height value below to 100% if the client has consistent image sizes */
+    max-height: 200px;
+    width: 100%;
+    max-width: 100%;
+    height: 200px;
+}
+
+.clerk_product_stock {
+    display: flex;
+    text-align: left;
+    justify-content: left;
+    align-items: center;
+    font-size: 80%;
+    text-transform: capitalize;
+    padding: 5px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.clerk_product_stock:before {
+    content: "";
+    height: 8px;
+    width: 8px;
+    margin: 0 5px 0 0;
+    border-radius: 50%;
+}
+
+.clerk_product_stock.in:before {
+    background: #78b904;
+}
+
+.clerk_product_stock.low:before {
+    background: #eea71e;
+}
+
+.clerk_product_stock.out:before {
+    background: #ee1e31;
+}
+
+.clerk_product_name {
+    display:flex;
+    color:#000;
+    font-weight:600;
+    font-size:12px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    text-align:left;
+    min-height:35px;
+    margin-bottom: .5em;
+  
+}
+
+.clerk_product_price_wrap {
+    font-size: 1rem;
+    min-height: auto;
+    flex-direction: row;
+    display: flex;
+    max-width: 100%;
+    justify-content: flex-start;
+}
+
+.clerk_product_price {
+    padding: 0px 5px 0px 0px;
+}
+
+.clerk_product_price.before {
+    opacity: .7;
+    flex:1;
+    font-weight:bold;
+    color:#4d4d4d;
+    text-decoration:line-through;
+    font-size:inherit;
+    text-align:center;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    max-width: -webkit-fit-content;
+    max-width: fit-content;
+    max-width: -moz-fit-content;
+    font-size:13px;
+}
+
+@media screen and (max-width: 400px) {
+    .clerk_product_price.before{
+        font-size:12px;
+        padding-top: 3px;
+    }
+}
+
+.clerk_product_price.now {
+    flex:1;
+    font-weight:bold;
+    font-size:13px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    text-align:center;
+    color:inherit;
+    max-width: -webkit-fit-content;
+    max-width: fit-content;
+    max-width: -moz-fit-content;
+}
+
+@media screen and (max-width: 400px) {
+    .clerk_product_price.now{
+        font-size:14px;
+    }
+}
+
+
+.clerk_product_cta{
+    border-radius:5px;
+    cursor:pointer;
+    color:#fff;
+    padding:5px;
+    margin:0;
+    display:block;
+    white-space:nowrap;
+    font-weight:600;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    border:none;
+    background-color:#2b565f;
+    border:1px solid #2b565f;
+    box-shadow: inset 0px -6px 0px 0px rgb(0 0 0 / 35%) !important;
+    text-align:center;
+    max-width: 100%;
+    text-decoration: none;
+    
+}
+
+@media screen and (max-width: 400px) {
+    .clerk_product_cta {
+        font-size:12px;
+    }
+}
+
+.clerk_product_cta:hover {
+    color:#fff;
+    background-color:#2b565f;
+    text-decoration: none !important;
+}
+
+.clerk_product_cta.out{
+    border-radius:5px;
+    cursor:pointer;
+    color:#fff;
+    padding:5px;
+    margin:0;
+    display:block;
+    white-space:nowrap;
+    font-weight:600;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    border:none;
+    background-color:#ff0000;
+    border:1px solid #ff0000;
+    box-shadow: inset 0px -6px 0px 0px rgb(0 0 0 / 35%) !important;
+    text-align:center;
+    max-width: 100%;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 400px) {
+    .clerk_product_cta.out {
+        font-size:12px;
+    }
+}
+
+.clerk_product_cta.out:hover {
+    color:#fff;
+    background-color:#ff0000;
+    text-decoration: none !important;
+}
+
+.clerk_content_wrap {
+    box-sizing: border-box;
+    margin: 1rem auto;
+    width: 100%;
+}
+
+.clerk_content_wrap.search {
+    margin-top: 0;
+}
+
+.clerk_load_more_btn {
+    background-color:#2b565f;
+    border:1px solid #2b565f;
+    box-shadow: inset 0px -6px 0px 0px rgb(0 0 0 / 35%) !important;
+    color: #fff;
+    padding: 0.3em 5em;
+    height:40px;
+    border-radius:5px;
+    margin: 0 auto;
+    font-weight:600;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    cursor: pointer;
+    transition: 0.3s ease;
+    display: block;
+    white-space: nowrap;
+    text-align: center;
+    max-width: -webkit-fit-content;
+    max-width: fit-content;
+    max-width: -moz-fit-content;
+    text-decoration: none;
+    margin: 1rem auto;
+    margin-top:50px;
+    
+}
+
+.clerk_product_cta:before{
+    font-family: "Font Awesome 5 Free";
+    content: "\f07a";
+    box-sizing: border-box;
+}
+
+
+
+
+
