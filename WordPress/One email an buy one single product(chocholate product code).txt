@@ -1,0 +1,27 @@
+<?php
+// ============= One email an buy one single product(chocholate product code) ============
+function check_email_if_ordered( $email ) {
+    if ( !isset($email) || empty($email) ) {
+        return false;
+    }
+    $args = array(
+        'customer' => $email
+    );
+    $orders = wc_get_orders( $args );
+    if ( empty( $orders ) ) {
+        return false;
+    }
+    return true;
+}
+function bitBirds_check_repaeat_purchase_processing($order) {
+    $product_id = 3809446; // a specific product ID you would like to check
+	$customer_email = WC()->customer->get_billing_email();
+	if( WC()->cart->find_product_in_cart( WC()->cart->generate_cart_id( $product_id ) ) && check_email_if_ordered($customer_email) ) {
+		throw new Exception( __(  'You cannot purchase <b style="text-decoration: underline;">100g Ritter Sport - Biscuit again</b>. Please remove it from the cart to continue!', 'woocommerce' ) );
+		die();
+	}else{
+		return $order;
+	}
+}
+add_action('woocommerce_checkout_create_order', 'bitBirds_check_repaeat_purchase_processing',10,1);
+// ============= One email an buy one single product(chocholate product code) ============
