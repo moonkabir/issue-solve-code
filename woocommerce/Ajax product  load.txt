@@ -1,0 +1,367 @@
+// ============= Ajax product start functions.php ============
+function bitBirds_load_more() {
+
+	$filter_value = $_POST['orderby'];
+	
+	if($filter_value == 'date'){
+		$orderby = 'date';
+		$meta_key = '';
+		$order = 'desc';
+	}elseif($filter_value == 'title'){
+		$orderby = 'title';
+		$meta_key = '';
+		$order = 'asc';
+	}elseif($filter_value == 'price'){
+		$orderby = 'meta_value_num';
+		$meta_key = '_price';
+		$order = 'asc';
+	}elseif($filter_value == 'price-desc'){
+		$orderby = 'meta_value_num';
+		$meta_key = '_price';
+		$order = 'desc';
+	}else{
+		$orderby = 'meta_value_num';
+		$meta_key = 'total_sales';
+		$order = 'desc';
+	}
+	
+	$arg = array(
+	  	'post_type' => 'product',
+		'post_status' => 'publish',
+	  	'posts_per_page' => 24,
+	  	'orderby' => $orderby,
+		'meta_key' => $meta_key,
+	  	'order' => $order,
+		'meta_query' => array(
+			array(
+				'key' => '_stock_status',
+				'value' => 'instock'
+			),
+// 			array(
+// 				'key' => '_backorders',
+// 				'value' => 'no'
+// 			),
+		),
+		'post__in' => array_merge( array( 0 ), wc_get_product_ids_on_sale() ),
+		'ignore_sticky_posts' => 1,
+	  	'paged' => $_POST['paged'],
+	);
+	
+	$ajaxposts = new WP_Query($arg);
+  
+	$response = '';
+  
+	if($ajaxposts->have_posts()) {
+		woocommerce_product_loop_start();
+		while($ajaxposts->have_posts()) : $ajaxposts->the_post();
+			$response .= wc_get_template_part('content', 'product');
+		endwhile;
+		woocommerce_product_loop_end();
+	} else {
+	  $response = '';
+	}
+	
+	exit;
+}
+add_action('wp_ajax_bitBirds_load_more', 'bitBirds_load_more');
+add_action('wp_ajax_nopriv_bitBirds_load_more', 'bitBirds_load_more');
+
+// ============= Ajax product End functions.php ============
+
+// =================black_friday_template.js start ===============
+;jQuery(function($) {
+    "use strict";
+    $(document).ready(function() {
+		//=========ajax-product start=============
+		//----------- checkout count down start --------
+			if($(".woocommerce").hasClass("bitBirds_ajax_products")){
+				var countDownDate2 = new Date("Nov 25, 2022 00:00:00").getTime();
+// 				var countDownDate2 = 1637967600000;
+				var x2 = setInterval(function() {
+				  var now2 = new Date().getTime();
+				  var distance2 = countDownDate2 - now2;
+				  var days2 = Math.floor(distance2 / (1000 * 60 * 60 * 24));
+				  var hours2 = Math.floor((distance2 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60) + (days2 * 24));
+				  var minutes2 = Math.floor((distance2 % (1000 * 60 * 60)) / (1000 * 60));
+				  var seconds2 = Math.floor((distance2 % (1000 * 60)) / 1000);
+				  document.getElementById("black_friday_countdown").innerHTML = hours2 + " Timer "+ minutes2 + " Min " + seconds2 + " Sek ";
+				  if (distance2 < 0) {
+					clearInterval(x2);
+					document.getElementById("black_friday_countdown").innerHTML = "EXPIRED";
+				  }
+				}, 1000);
+			}
+		//
+		//
+		//
+		//
+		var currentPage = 1;
+		$('#bitBirds_load_more_btn').on('click', function() {
+			currentPage++; 
+			var base_url = window.location.origin;
+// 			console.log(base_url)
+			let urlParams = new URLSearchParams(window.location.search);
+			let orderBy = urlParams.get('orderby');
+// 			console.log(orderBy);
+			$.ajax({
+				type: 'POST',
+				url: base_url+'/wp-admin/admin-ajax.php',
+// 				url: base_url+'/projects/wp/wp_testing_site/wp-admin/admin-ajax.php',
+				dataType: 'html',
+				data: {
+					action: 'bitBirds_load_more',
+					paged: currentPage,
+					orderby: orderBy
+				},
+				beforeSend: function() {
+					$('.ajax-loading').html('<i class="fa fa-spinner fa-spin"></i>');
+				},
+				success: function (res) {
+					var shown_post = parseInt( $('.bitBirds_ajax_products ul li').length );
+					var total_post = parseInt( $('.total_post').text() )
+// 					console.log(res.length)
+					var progress = String( 100 * (shown_post / total_post) );
+// 					$('#bitBirds_progress_bar .proggress').css('width',"50.4534534534%");
+					$('#bitBirds_progress_bar .proggress').css({'width': progress+"%"});
+					console.log( progress );
+					if(shown_post >= total_post){
+						$('#bitBirds_load_more_btn .button_text').html('<b class="text-center text-light"> No more Product Found </b>');
+						$('#bitBirds_load_more_btn').css({'pointer-events' : 'none'})
+					}else{
+						$('.bitBirds_ajax_products').append(res);
+						var shown_post = $('.bitBirds_ajax_products ul li').length;
+// 						console.log(shown_post);
+						$('.post_count').text(shown_post);
+						$('.bitBirds_ajax_products ul:last-child').hide().slideDown();
+						$('.ajax-loading').html(''); 
+					}
+				},
+				complete: function() {
+					$('.ajax-loading').html('');  
+				}
+			});
+		});
+	//============ajax product end=============
+	})
+})
+// =================black_friday_template.js end ===============
+
+
+//================= Template page start============
+<?php
+// 	global $wp_query;
+// 	$post_id = $wp_query->post->ID; //3814030
+	global $post;
+	$post_id = $post->ID;
+	$black_friday_running = get_post_meta( $post_id , $key = 'is_black_friday_running', $single = true );
+// 	echo $black_friday_running;
+	if($black_friday_running == 1){
+?>			
+				
+				
+				
+				
+<style>
+h1{
+    margin-top: 10px;
+    font-size: 28px;
+}
+p{
+    font-size: 14px;
+}
+.star-rating {
+    display: none !important;
+}
+</style>
+ <div class="woocommerce">
+    <form class="woocommerce-ordering" method="get" style="margin-bottom: 15px;">
+        <select id="tilbud_filter" name="orderby" class="orderby" aria-label="Shop order">
+                        <option value="popularity">Mest Populær</option>
+                        <option value="date">Nyeste</option>
+                        <option value="price">Sorter Pris: Lav Til Høj</option>
+                        <option value="price-desc">Sorter Pris - Høj til Lav</option>
+                </select>
+        <input type="hidden" name="paged" value="1">
+    </form>
+</div>
+				
+				
+	
+				
+<style>
+	/* -------- loadmore button design start ------- */
+	.bitBirds_load_more_btn {
+		background: #2b565f;
+		padding: 10px 0px;
+		margin: auto;
+		width: -webkit-fit-content;
+		width: -moz-fit-content;
+		width: fit-content;
+		margin-bottom: 30px;
+		box-shadow: inset 0px -6px 0px 0px rgb(0 0 0 / 35%) !important;
+		border-radius: 5px;
+		text-align: center;
+	}
+	.bitBirds_load_more_btn a {
+		color: #fff;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-weight: 600;
+		padding: 10px 20px;
+	}
+	.bitBirds_load_more_btn img {
+		padding: 0 5px;
+	}
+	.bitBirds_load_more_btn:active{
+		box-shadow: inset 0px 4px 0px 0px rgb(0 0 0 / 25%) !important;
+	}
+	/* -------- loadmore button design end ------- */
+</style>
+				
+		<div class="woocommerce  columns-4 quick-sale black-friday-product bitBirds_ajax_products">
+				<?php 
+					$filter_value = $_GET['orderby'];
+					
+					if($filter_value == 'date'){
+						$orderby = 'date';
+						$meta_key = '';
+						$order = 'desc';
+					}elseif($filter_value == 'title'){
+						$orderby = 'title';
+						$meta_key = '';
+						$order = 'asc';
+					}elseif($filter_value == 'price'){
+						$orderby = 'meta_value_num';
+						$meta_key = '_price';
+						$order = 'asc';
+					}elseif($filter_value == 'price-desc'){
+						$orderby = 'meta_value_num';
+						$meta_key = '_price';
+						$order = 'desc';
+					}else{
+						$orderby = 'meta_value_num';
+						$meta_key = 'total_sales';
+						$order = 'desc';
+					}
+			
+					$arg = array(
+						'post_type' => 'product',
+						'post_status' => 'publish',
+						'posts_per_page' => 24,
+						'orderby' => $orderby,
+						'meta_key' => $meta_key,
+						'order' => $order,
+						'meta_query' => array(
+							array(
+								'key' => '_stock_status',
+								'value' => 'instock'
+							),
+// 							array(
+// 								'key' => '_backorders',
+// 								'value' => 'no'
+// 							),
+						),
+						'post__in' => array_merge( array( 0 ), wc_get_product_ids_on_sale() ),
+						'ignore_sticky_posts' => 1,
+						'paged' => 1,
+					);
+					
+					$ajaxposts = new WP_Query($arg);
+
+					$response = '';
+
+					if($ajaxposts->have_posts()) {
+						woocommerce_product_loop_start();
+						while($ajaxposts->have_posts()) : $ajaxposts->the_post();
+							$response .= wc_get_template_part('content', 'product');
+						endwhile;
+						woocommerce_product_loop_end();
+					} else {
+					  $response = '';
+					}
+
+// 					echo $response;
+					$totalpost = $ajaxposts->found_posts; 
+	
+					$postcount = $ajaxposts->post_count; 
+				?>
+				</div>
+				
+				
+				
+				<div class="btn_wrapper">
+<p class="product-count">Viser <span class="post_count"><?php  echo $postcount; ?></span> ud af <span class="total_post"><?php echo $totalpost; ?></span> produkter</p>
+					<style>
+						#bitBirds_progress_bar{
+							width: 300px !important;
+							background: #acacac !important;
+							margin: auto;
+							margin-bottom: 8px;
+							border-radius: 5px !important;
+						}
+						#bitBirds_progress_bar .progressbar {
+							width: 100%;
+							margin-top: 5px;
+							margin-bottom: 15px;
+							position: relative;
+							background-color: #EEEEEE;
+							box-shadow: inset 0px 1px 1px rgb(0 0 0 / 10%);
+						}
+						#bitBirds_progress_bar .proggress {
+							background: #2b565f !important;
+							border-radius: 5px !important;
+							background-color: rgb(52, 152, 219); 
+							height: 10px; 
+							border-radius: 0px;
+						}
+						#bitBirds_progress_bar .percentCount {
+							display: none;
+						}
+						#bitBirds_progress_bar .percentCount {
+							float: right;
+							margin-top: 10px;
+							clear: both;
+							font-weight: bold;
+							font-family: Arial;
+						}
+					</style>
+		<div id="bitBirds_progress_bar">
+			<div class="progressbar" style="width: 100%; background-color: rgb(238, 238, 238); border-radius: 0px;">
+				<?php  
+					 $progress = intval(100 * ($postcount / $totalpost) ) ; 
+				?>
+				<div class="proggress" style="width: <?php  echo $progress; ?>%;"></div>
+				<div class="percentCount"><?php echo $progress; ?>%</div>
+			</div>
+		</div>
+ <div class="bitBirds_load_more_btn">
+            <a href="javascript:;" class="showMore" id="bitBirds_load_more_btn">
+                <img src="https://woocommerce-715521-3047665.cloudwaysapps.com/wp-content/themes/merchshark/assets/images/arrow-down-line-kopier.png" alt="arrow">
+                 <span class="ajax-loading"></span> <span class="button_text">Indlæs flere produkter</span>
+                <img src="https://woocommerce-715521-3047665.cloudwaysapps.com/wp-content/themes/merchshark/assets/images/arrow-down-line-kopier.png" alt="arrow">
+            </a>
+        </div>
+    </div>
+
+
+	<?php 
+		}else{ 
+			?>
+				
+			<div class="campaign-element-newsletter__text">
+				<div class="campaign-element-newsletter__title">
+					 Vil du have vores Black Friday nyheder som den første?  
+				</div>
+				<p>Tilmeld dig vores nyhedsbrev, så sender vi mails før, under og efter Black Friday, så du er 100% opdateret på årets største udsalg før alle andre.</p>
+				<p> Vær dog opmærksom på, at du også vil modtage vores andre nyhedsbreve (fyldt med tilbud fra f.eks. vores fødselsdag osv.)</p>
+			</div>
+				
+		<?php
+			echo do_shortcode('[email-subscribers-form id="2"]');
+		
+		}
+	?>		
+				
+	
+
+//================= Template page End============
