@@ -1,0 +1,23 @@
+add_action( 'woocommerce_loaded', 'update_products_by_bitbirds' );
+function update_products_by_bitbirds(){
+    $limit = 200;
+    // getting all products
+    $products_ids = get_posts( array(
+        'post_type'        => 'product', // or ['product','product_variation'],
+        'numberposts'      => $limit,
+        'post_status'      => 'publish',
+        'fields'           => 'ids',
+        'meta_query'       => array( array(
+            'key'     => '_sync_updated',
+            'compare' => 'NOT EXISTS',
+        ) )
+    ) );
+    // Loop through product Ids
+    foreach ( $products_ids as $product_id ) {
+        // Get the WC_Product object
+        $product = wc_get_product($product_id);
+        // Mark product as updated
+        $product->update_meta_data( '_sync_updated', true );
+        $product->save();
+    }
+}
