@@ -1,0 +1,16 @@
+add_filter( 'woocommerce_get_price_html', 'custom_dynamic_sale_price_html', 20, 2 );
+function custom_dynamic_sale_price_html( $price_html, $product ) {
+    if( $product->is_type('variable') ) return $price_html;
+
+
+    $price_html = wc_format_sale_price( 
+		wc_get_price_to_display( $product, array( 'price' => $product->get_regular_price() ) ), 
+		wc_get_price_to_display(  $product, array( 'price' => $product->get_sale_price() ) ) ) . $product->get_price_suffix();
+
+
+    return $price_html;
+}
+wc_format_sale_price -> Return regular_price and sale_price ;
+wc_get_price_to_display-> Returns the price
+get_regular_price-> Returns the regular price
+get_sale_price-> Returns the sale price
