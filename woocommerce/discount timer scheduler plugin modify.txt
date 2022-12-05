@@ -1,0 +1,96 @@
+required plugin url: https://wordpress.org/plugins/woo-sale-discount-scheduler/
+<?php
+// Paste this code in functions.php file
+// ============= scheduler countdown timer start =======================
+add_shortcode("product_sale_countdown_timer","wcct_trigger_countdown_timer_bitBirds");
+function wcct_trigger_countdown_timer_bitBirds(){
+	if ( function_exists( 'wcct_trigger_countdown_timer' ) ) {
+		return wcct_trigger_countdown_timer();	
+	}else{
+		echo "Functon doesnot exist!";
+	}
+}
+add_shortcode("product_sale_countdown_timer","wsds_schedule_sale_ongoing_countdown_bitBirds");
+function wsds_schedule_sale_ongoing_countdown_bitBirds() {
+	global $product;
+	global  $woocommerce;
+	$product_ids = wsds_get_schedule_product_list(1);
+	$sale_price = wsds_get_discount_price();
+	$currency_symbol= get_woocommerce_currency_symbol();
+	$product_id=$product->get_id();	
+	if (in_array($product_id, $product_ids)){ 
+		  $end_time=get_post_meta($product_id,'wsds_schedule_sale_end_time',true);  
+		  $countdown=get_post_meta($product_id,'wsds_schedule_sale_end_countdown',true);   
+		  $time_diffrent=$end_time-time();
+		  $s = $time_diffrent;
+		  $m = floor($s / 60);
+		  $s = $s % 60;
+		  $h = floor($m / 60);
+		  $m = $m % 60;
+		  $d = floor($h / 24);
+		  $h = $h % 24;
+	if ($time_diffrent > 0 && !empty($countdown)){
+		echo '<div  id="wsds_countdown_end_'.$product_id.'" data-product="'.$product_id.'" data-end="'.$end_time.'" class="wsds_countdown_end wsds_coundown_single single_product_timer">
+			<p id="bitbirds_single_product_timer_content">TILBUD UDLØBER </p>
+			<p id="">'.$h.' Timer</p>
+			<p id="">'.$m.' Min</p>
+			<p id="">'.$s.' Sek</p>
+			</div>';
+		}
+	}
+}
+// ============= scheduler countdown timer END =======================
+// ============= filter hook add in plugin woocommerce sale discount scheduler.php file after wsds_return_price function start=======================
+function bitbirds_custom_dynamic_sale_price_html( $price_html, $product ) {
+	$product_id = $product->get_id();
+	$status=get_post_meta($product_id,'wsds_schedule_sale_mode',true);
+	if( $product->is_type('variable') ) return $price_html;
+	if(wc_get_price_to_display( $product, array( 'price' => $product->get_regular_price() ) ) > wc_get_price_to_display(  $product, array( 'price' => $product->get_sale_price() ) )  && $status == 1){
+		$price_html = wc_format_sale_price( wc_get_price_to_display( $product, array( 'price' => $product->get_regular_price() ) ), wc_get_price_to_display(  $product, array( 'price' => $product->get_sale_price() ) ) ) . $product->get_price_suffix();
+		return $price_html;
+	}else{
+		$num = $product->get_regular_price();
+		$regular_float_price = number_format($num, 2);
+		$price_html =  "<span class='woocommerce-Price-amount amount'><bdi>".number_format(wc_get_price_to_display( $product, array( 'price' => $regular_float_price ) ), 2, ',', '')." <span class='woocommerce-Price-currencySymbol'>Kr.</span></bdi></span>";
+		return $price_html;
+	}
+}
+add_filter( 'woocommerce_get_price_html', 'bitbirds_custom_dynamic_sale_price_html', 20, 2 );
+function bitbirds_merchshark_new_badge_shop_page($product){
+	global $product;
+	$product_id = $product->get_id();
+	$status=get_post_meta($product_id,'wsds_schedule_sale_mode',true);	
+	$regular_price = (float) $product->get_regular_price();
+	if($regular_price > 0 && $status == 1){
+		$sale_price    = (float) wc_get_price_to_display(  $product, array( 'price' => $product->get_sale_price() ) );
+		$percentage    = round(100 - ($sale_price / $regular_price * 100)) . '%';		
+		echo '<span class="onsale discount-percentage"> ' . $percentage . '</span>';
+	}
+}
+add_action('woocommerce_before_single_product_summary', 'bitbirds_merchshark_new_badge_shop_page', 25, 1);
+add_action('woocommerce_before_shop_loop_item_title', 'bitbirds_merchshark_new_badge_shop_page', 25, 1);
+?>
+<script>
+// =========== comment this code with relacement code ===========
+// jQuery('#wsds_countdown_end_' + product_id + ' ul').html(wsds_convertMS(remain_end_time + '000'));
+jQuery('#wsds_countdown_end_' + product_id).html(wsds_convertMS(remain_end_time + '000'));
+
+
+
+// return { d: d, h: h, m: m, s: s };
+// var html = '<li><div><span class="wsds_count_digit">' + d + '</span><span class="wsds_count_lable">Days</span></div></li><li><div><span class="wsds_count_digit">' + h + '</span><span class="wsds_count_lable">Hours</span></div></li><li><div><span class="wsds_count_digit">' + m + '</span><span class="wsds_count_lable">Min</span></div></li><li><div><span class="wsds_count_digit">' + s + '</span><span class="wsds_count_lable">Sec</span></div></li>'
+var html = '<p id="bitbirds_single_product_timer_content">TILBUD UDLØBER</p><p>'+ h +' Timer</p><p>'+ m +' Min</p><p>'+ s +' Sek</p>';	
+</script>
+// ============= filter hook add in plugin woocommerce sale discount scheduler.php file after wsds_return_price function END=======================
+// ============== add some css in customizer panel ===============
+<style>
+.wsds_countdown_end.wsds_coundown_single{
+    display: none !important;
+}
+.wsds_countdown_end.wsds_coundown_single.single_product_timer{
+	display: flex !important;
+}
+ul.products li .wsds_coundown_shop{
+	display: none;
+}
+</style>
