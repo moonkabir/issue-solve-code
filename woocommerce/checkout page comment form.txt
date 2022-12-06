@@ -1,0 +1,22 @@
+// ========= main.js file ===========
+$( "#order_comments_field .order_comments_label" ).html('<input type="checkbox" id="venoe_checkout_comment_checkbox" name="venoe_checkout_comment_checkbox" checked><label for="venoe_checkout_comment_checkbox" > Hvor må pakken stilles? (nødvendig) <abbr class="required" title="påkrævet">*</abbr></label>');
+$("#venoe_checkout_comment_checkbox").click(function(e){
+    e.preventDefault();
+// 		if($(this).is(':checked')){
+// 			$('#order_comments').show('fast');
+// 		}
+// 		else{
+// 			$('#order_comments').hide('fast');
+// 		}
+});
+
+
+// ======== functions.php file =================
+add_filter( 'woocommerce_checkout_fields', 'change_order_note_label' );
+function change_order_note_label( $fields ) {
+	$fields['order']['order_comments']['label'] = __('Hvor må pakken stilles? (nødvendig)');
+	$fields['order']['order_comments']['label_class'] = 'order_comments_label';
+    $fields['order']['order_comments']['placeholder'] = __('Hvor må pakken stilles? (nødvendig)');
+	$fields['order']['order_comments']['required'] = true;
+    return $fields;
+}
