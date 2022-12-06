@@ -42,9 +42,13 @@ function wsds_schedule_sale_ongoing_countdown_bitBirds() {
 // ============= scheduler countdown timer END =======================
 // ============= filter hook add in plugin woocommerce sale discount scheduler.php file after wsds_return_price function start=======================
 function bitbirds_custom_dynamic_sale_price_html( $price_html, $product ) {
+	if( $product->is_type('variable') ) return $price_html;
+	if($product->get_sale_price() > 0) {
+		$price_html = wc_format_sale_price( wc_get_price_to_display( $product, array( 'price' => $product->get_regular_price() ) ), wc_get_price_to_display(  $product, array( 'price' => $product->get_sale_price() ) ) ) . $product->get_price_suffix();
+		return $price_html;
+	}
 	$product_id = $product->get_id();
 	$status=get_post_meta($product_id,'wsds_schedule_sale_mode',true);
-	if( $product->is_type('variable') ) return $price_html;
 	if(wc_get_price_to_display( $product, array( 'price' => $product->get_regular_price() ) ) > wc_get_price_to_display(  $product, array( 'price' => $product->get_sale_price() ) )  && $status == 1){
 		$price_html = wc_format_sale_price( wc_get_price_to_display( $product, array( 'price' => $product->get_regular_price() ) ), wc_get_price_to_display(  $product, array( 'price' => $product->get_sale_price() ) ) ) . $product->get_price_suffix();
 		return $price_html;
