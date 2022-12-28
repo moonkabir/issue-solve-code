@@ -1,0 +1,32 @@
+$helloZai_bank_withdraw = DB::table('helloZai_bank_withdraw as a')
+                                ->leftJoin('hellozai_VA as b', 'a.transaction_from', '=', 'b.wallet_accounts_id')
+                                ->leftJoin('hellozai_VA as c', 'a.transaction_to', '=', 'c.wallet_accounts_id')
+                                ->select('a.*','b.user_id as from','c.user_id as to')
+                                ->orderBy('a.id', 'DESC')
+                                ->get();
+        
+        $hellozai_Payment_Transactions = DB::table('hellozai_Payment_Transactions')
+                                            ->orderBy('id','DESC')
+                                            ->select(
+                                                'id',
+                                                'debit_credit_type as type',
+                                                'amount',
+                                                'created_at',
+                                                'response->payload->transactions->payin_details->debtor_legal_name AS debtor_legal_name',
+                                                'response->payload->transactions->user_id AS from',
+                                                'response->payload->transactions->payin_details->debtor_name AS to',
+                                                'response->payload->transactions->payin_details->debtor_account AS debtor_account',
+                                                'response->payload->transactions->type_method AS type_method',
+                                                'response->payload->transactions->currency AS currency'
+                                            )
+                                            ->get();
+                                            
+        $data = $helloZai_bank_withdraw->merge($hellozai_Payment_Transactions);       
+        $data = json_decode(json_encode($data), true);
+        $data = array_map(function($data) {
+            return (object) $data;
+        }, $data);
+        usort($data, function($a, $b) {
+            return $a->created_at <= $b->created_at;
+        });      
+        $helloZai_bank_withdraw =  $data;
