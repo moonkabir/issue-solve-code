@@ -1,0 +1,11 @@
+$hellozai_Payment_Transactions = DB::table('hellozai_Payment_Transactions')
+                                            ->orderBy('id','DESC')
+                                            ->select(
+                                                'debit_credit_type',
+                                                'amount',
+                                                'created_at',
+                                                'response->payload->transactions->payin_details->debtor_legal_name AS debtor_legal_name',
+                                                'response->payload->transactions->payee_name AS payee_name',
+                                                'response->payload->transactions->user_id AS user_id'
+                                            )
+                                            ->get();
