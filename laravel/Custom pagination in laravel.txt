@@ -1,0 +1,27 @@
+1. Create a function in your controller:
+  public function paginate($items, $perPage, $page = null){
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $total = count($items);
+        $currentpage = $page;
+        $offset = ($currentpage * $perPage) - $perPage ;
+        $itemstoshow = array_slice($items , $offset , $perPage);
+        return new LengthAwarePaginator($itemstoshow ,$total   ,$perPage);
+  }
+
+
+2.use before class controller perameter :
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+3. call your recently created function:
+$variable = $this->paginate( your_array_data() , Per_page_data_show _amount( like 30));
+$variable >withPath('');
+
+4. Create a link your frontend code:
+{{ $helloZai_bank_withdraw->links() }}
+
+5.Use Boot method for pagination design app/Providers/AppServiceProvider.php file
+use Illuminate\Pagination\Paginator;
+
+6.paste code in boot function app/Providers/AppServiceProvider.php file:
+Paginator::useBootstrap();
