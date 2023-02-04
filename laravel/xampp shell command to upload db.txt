@@ -1,0 +1,1 @@
+mysql -u root -p -v remit_passport < "C:\Users\PencilBox\Downloads/wmbftmyx_remit_new.sql"
