@@ -1,0 +1,17 @@
+/**
+ * category wise add to cart button text change woocommerce
+ *
+ * @return string
+ */
+add_filter('woocommerce_product_add_to_cart_text', 'change_add_to_cart_text');
+add_filter('woocommerce_product_single_add_to_cart_text', 'change_add_to_cart_text');
+function change_add_to_cart_text()
+{
+	global $product;
+	$terms = get_the_terms ( $product->id, 'product_cat' );
+	if('custom-wedding-services' == $terms[0]->slug){
+		return __('Wherever Your Heart Desires!', 'woocommerce');
+	}else{
+		return __('Add To Cart', 'woocommerce');
+	}
+}
