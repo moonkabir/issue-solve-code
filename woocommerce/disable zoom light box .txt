@@ -1,0 +1,11 @@
+/**
+ * disable zoom light box 
+ *
+ * @return string
+ */
+function wc_remove_image_effect_support() {
+    remove_theme_support( 'wc-product-gallery-zoom' );
+    remove_theme_support( 'wc-product-gallery-lightbox' );
+    remove_theme_support( 'wc-product-gallery-slider' );
+}
+add_action( 'after_setup_theme', 'wc_remove_image_effect_support', 100 );
