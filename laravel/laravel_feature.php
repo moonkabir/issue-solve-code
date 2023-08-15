@@ -19,3 +19,6 @@ public function moon(){
 }
 $moon =  new App\Models\Lookup;
 echo $moon->moon();
+
+// Multiple condition pass in where condition in model object
+App\Models\Lookup::where(['name'=> 'unit','value'=>$product->unit])->value('title')
