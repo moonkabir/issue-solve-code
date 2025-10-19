@@ -1,0 +1,2 @@
+let tabId = "holiday_date_table";
+$('#' + tabId).load(window.location.href + ' #' + tabId + ' > *');
